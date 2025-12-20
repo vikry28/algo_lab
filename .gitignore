@@ -1,0 +1,75 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Visual Studio Code related
+.vscode/
+!.vscode/extensions.json
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio artifacts
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Environment Secrets & Sensitive Files
+.env*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.secret
+*.pem
+*.jks
+key.properties
+lib/core/env/env.g.dart
+
+# Firebase Configs (Always ignore for public repos)
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+ios/firebase_app_id_file.json
+lib/firebase_options.dart
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Build outputs
+*.apk
+*.aab
+*.ipa
