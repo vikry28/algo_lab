@@ -236,6 +236,7 @@ class _SortingLabViewState extends State<SortingLabView>
                                   highlightType: prov.highlightType,
                                   compareColor: prov.compareColor,
                                   swapColor: prov.swapColor,
+                                  isDark: isDark,
                                 ),
                               ),
                             ),

@@ -55,4 +55,27 @@ class TimeUtils {
 
     return parts.isEmpty ? "0 seconds" : parts.join(" ");
   }
+
+  static String timeAgo(
+    int timestamp, {
+    required String justNow,
+    required String minsAgo,
+    required String hoursAgo,
+    required String daysAgo,
+  }) {
+    if (timestamp == 0) return justNow;
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final diff = now - timestamp;
+    if (diff < 0) return justNow;
+
+    final seconds = (diff / 1000).floor();
+    final minutes = (seconds / 60).floor();
+    final hours = (minutes / 60).floor();
+    final days = (hours / 24).floor();
+
+    if (days > 0) return "$days $daysAgo";
+    if (hours > 0) return "$hours $hoursAgo";
+    if (minutes > 0) return "$minutes $minsAgo";
+    return justNow;
+  }
 }

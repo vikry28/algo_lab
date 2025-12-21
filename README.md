@@ -4,6 +4,7 @@
 [![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
 [![Clean Architecture](https://img.shields.io/badge/Clean-Architecture-blue?style=for-the-badge)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+[![State management - Provider](https://img.shields.io/badge/State%20Management-Provider-orange?style=for-the-badge)](https://pub.dev/packages/provider)
 
 **Algo Lab** is a state-of-the-art educational platform designed to bridge the gap between abstract algorithmic concepts and real-world application. Built with a stunning **Glassmorphism UI**, it provides an immersive learning experience through interactive visualizations and structured modules.
 
@@ -62,6 +63,12 @@ lib/
 │   ├── profile/        # Progress, Achievements, Settings
 │   └── splash/         # Entry logic
 ```
+
+### 🧠 State Management
+The application utilizes **Provider** combined with **ChangeNotifier** for reactively managing state across the Clean Architecture layers:
+*   **Decoupled Logic**: Providers act as the bridge between Domain Use Cases and the Presentation Layer.
+*   **Real-time Updates**: Stream-based updates from Firestore are piped into Providers to reflect user progress instantly.
+*   **Scalable Architecture**: Each feature has its own dedicated Provider (e.g., `RSAProvider`, `PathfindingProvider`) to maintain a single source of truth for complex visualizations.
 
 ---
 

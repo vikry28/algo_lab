@@ -7,6 +7,7 @@ import '../../../../core/constants/app_typography.dart';
 import '../../../../core/theme/theme_extension.dart';
 import '../../../../core/theme/theme_provider.dart';
 import '../../../home/presentation/widget/app_bar.dart';
+import '../../../../core/constants/app_localizations.dart';
 import '../provider/rsa_provider.dart';
 
 class RSALabView extends StatelessWidget {
@@ -54,12 +55,12 @@ class RSALabView extends StatelessWidget {
                       SizedBox(height: 20.h),
 
                       // Case Study Header
-                      _buildCaseStudy(textColor),
+                      _buildCaseStudy(textColor, context),
 
                       SizedBox(height: 20.h),
 
                       // Section 1: Keys
-                      _buildKeyPanel(prov, glass, isDark),
+                      _buildKeyPanel(prov, glass, isDark, textColor),
 
                       SizedBox(height: 24.h),
 
@@ -78,7 +79,8 @@ class RSALabView extends StatelessWidget {
     );
   }
 
-  Widget _buildCaseStudy(Color textColor) {
+  Widget _buildCaseStudy(Color textColor, BuildContext context) {
+    final t = AppLocalizations.of(context);
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
@@ -99,14 +101,14 @@ class RSALabView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "E-Banking Security Case",
+                  t.translate('rsa_title_pro').toUpperCase(),
                   style: AppTypography.labelSmall.copyWith(
                     color: Colors.purpleAccent,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
-                  "Protecting digital transactions using asymmetric key pairs.",
+                  t.translate('rsa_desc_pro'),
                   style: AppTypography.bodySmall.copyWith(
                     color: textColor.withValues(alpha: 0.7),
                     fontSize: 11.sp,
@@ -120,7 +122,12 @@ class RSALabView extends StatelessWidget {
     );
   }
 
-  Widget _buildKeyPanel(RSAProvider prov, GlassTheme glass, bool isDark) {
+  Widget _buildKeyPanel(
+    RSAProvider prov,
+    GlassTheme glass,
+    bool isDark,
+    Color textColor,
+  ) {
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
@@ -135,7 +142,10 @@ class RSALabView extends StatelessWidget {
             children: [
               Text(
                 "Digital Identity",
-                style: AppTypography.titleMedium.copyWith(fontSize: 16.sp),
+                style: AppTypography.titleMedium.copyWith(
+                  fontSize: 16.sp,
+                  color: textColor,
+                ),
               ),
               IconButton(
                 onPressed: prov.generateNewKeys,
@@ -240,7 +250,7 @@ class RSALabView extends StatelessWidget {
         TextField(
           onChanged: prov.updateMessage,
           textAlign: TextAlign.center,
-          style: AppTypography.h2.copyWith(letterSpacing: 4),
+          style: AppTypography.h2.copyWith(color: textColor, letterSpacing: 4),
           decoration: InputDecoration(
             hintText: "TYPE MESSAGE",
             hintStyle: TextStyle(color: textColor.withValues(alpha: 0.3)),
@@ -427,7 +437,11 @@ class RSALabView extends StatelessWidget {
                   child: Text(
                     items[i],
                     style: GoogleFonts.firaCode(
-                      color: isHighlight ? Colors.white : color,
+                      color: isHighlight
+                          ? (color.computeLuminance() > 0.5
+                                ? Colors.black
+                                : Colors.white)
+                          : color,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

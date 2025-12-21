@@ -183,45 +183,12 @@ class HomeView extends StatelessWidget {
                               algo,
                             );
 
-                            // Map index global ke key pro translation
-                            String proTitleKey = '';
-                            String proDescKey = '';
-
-                            switch (globalIndex) {
-                              case 0: // Bubble
-                                proTitleKey = 'lab_bubble_title';
-                                proDescKey = 'lab_bubble_desc';
-                                break;
-                              case 1: // Selection
-                                proTitleKey = 'lab_selection_title';
-                                proDescKey = 'lab_selection_desc';
-                                break;
-                              case 2: // Insertion
-                                proTitleKey = 'lab_insertion_title';
-                                proDescKey = 'lab_insertion_desc';
-                                break;
-                              case 3: // Quick
-                                proTitleKey = 'lab_quick_title';
-                                proDescKey = 'lab_quick_desc';
-                                break;
-                              case 4: // RSA
-                                proTitleKey = 'rsa_title_pro';
-                                proDescKey = 'rsa_desc_pro';
-                                break;
-                              case 5: // A*
-                                proTitleKey = 'astar_title_pro';
-                                proDescKey = 'astar_desc_pro';
-                                break;
-                              default:
-                                proTitleKey = '';
-                            }
-
                             return TiltAlgoCard(
-                              title: proTitleKey.isNotEmpty
-                                  ? t.translate(proTitleKey)
+                              title: algo.titleKey.isNotEmpty
+                                  ? t.translate(algo.titleKey)
                                   : algo.getTitle(langCode),
-                              subtitle: proDescKey.isNotEmpty
-                                  ? t.translate(proDescKey)
+                              subtitle: algo.descriptionKey.isNotEmpty
+                                  ? t.translate(algo.descriptionKey)
                                   : algo.getDescription(langCode),
                               icon: AppIcons.getIcon(algo.icon),
                               color: Color(int.parse(algo.colorHex, radix: 16)),

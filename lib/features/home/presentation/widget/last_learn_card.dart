@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_localizations.dart';
+import '../../../../core/utils/time_utils.dart';
 import '../../../learning/presentation/provider/learning_provider.dart';
 
 class LastLearnedCard extends StatelessWidget {
@@ -349,21 +350,12 @@ class LastLearnedCard extends StatelessWidget {
 
   String _getTimeAgo(int timestamp, BuildContext context) {
     final loc = AppLocalizations.of(context);
-    if (timestamp == 0) return loc.translate('time_recently');
-
-    final now = DateTime.now().millisecondsSinceEpoch;
-    final diff = now - timestamp;
-
-    if (diff < 0) return loc.translate('time_just_now');
-
-    final seconds = (diff / 1000).floor();
-    final minutes = (seconds / 60).floor();
-    final hours = (minutes / 60).floor();
-    final days = (hours / 24).floor();
-
-    if (days > 0) return "$days ${loc.translate('time_days_ago')}";
-    if (hours > 0) return "$hours ${loc.translate('time_hours_ago')}";
-    if (minutes > 0) return "$minutes ${loc.translate('time_minutes_ago')}";
-    return loc.translate('time_just_now');
+    return TimeUtils.timeAgo(
+      timestamp,
+      justNow: loc.translate('time_just_now'),
+      minsAgo: loc.translate('time_minutes_ago'),
+      hoursAgo: loc.translate('time_hours_ago'),
+      daysAgo: loc.translate('time_days_ago'),
+    );
   }
 }

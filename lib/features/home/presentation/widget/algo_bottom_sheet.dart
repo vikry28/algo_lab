@@ -359,37 +359,6 @@ class _AlgoBottomSheetState extends State<AlgoBottomSheet> {
               final t = AppLocalizations.of(context);
               final globalIndex = provider.algorithms.indexOf(algoItem);
 
-              // Map index global ke key pro translation
-              String proTitleKey = '';
-              String proDescKey = '';
-
-              switch (globalIndex) {
-                case 0:
-                  proTitleKey = 'lab_bubble_title';
-                  proDescKey = 'lab_bubble_desc';
-                  break;
-                case 1:
-                  proTitleKey = 'lab_selection_title';
-                  proDescKey = 'lab_selection_desc';
-                  break;
-                case 2:
-                  proTitleKey = 'lab_insertion_title';
-                  proDescKey = 'lab_insertion_desc';
-                  break;
-                case 3:
-                  proTitleKey = 'lab_quick_title';
-                  proDescKey = 'lab_quick_desc';
-                  break;
-                case 4:
-                  proTitleKey = 'rsa_title_pro';
-                  proDescKey = 'rsa_desc_pro';
-                  break;
-                case 5:
-                  proTitleKey = 'astar_title_pro';
-                  proDescKey = 'astar_desc_pro';
-                  break;
-              }
-
               return Center(
                 child: Transform.scale(
                   scale: scale,
@@ -406,11 +375,11 @@ class _AlgoBottomSheetState extends State<AlgoBottomSheet> {
                       }
                     },
                     child: _AlgoCard(
-                      title: proTitleKey.isNotEmpty
-                          ? t.translate(proTitleKey)
+                      title: algoItem.titleKey.isNotEmpty
+                          ? t.translate(algoItem.titleKey)
                           : algoItem.getTitle(langCode),
-                      description: proDescKey.isNotEmpty
-                          ? t.translate(proDescKey)
+                      description: algoItem.descriptionKey.isNotEmpty
+                          ? t.translate(algoItem.descriptionKey)
                           : algoItem.getDescription(langCode),
                       icon: AppIcons.getIcon(algoItem.icon),
                       color: Color(int.parse(algoItem.colorHex, radix: 16)),

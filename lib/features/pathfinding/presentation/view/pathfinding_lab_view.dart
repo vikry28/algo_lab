@@ -369,7 +369,8 @@ class PathfindingLabView extends StatelessWidget {
               final x = index ~/ prov.cols;
               final y = index % prov.cols;
               final node = prov.grid[x][y];
-              return _buildNode(node, prov);
+              final isDark = Provider.of<ThemeProvider>(context).isDark;
+              return _buildNode(node, prov, isDark);
             },
           ),
         );
@@ -377,13 +378,15 @@ class PathfindingLabView extends StatelessWidget {
     );
   }
 
-  Widget _buildNode(GridNode node, PathfindingProvider prov) {
+  Widget _buildNode(GridNode node, PathfindingProvider prov, bool isDark) {
     Color color;
     IconData? icon;
 
     switch (node.type) {
       case NodeType.empty:
-        color = Colors.white.withValues(alpha: 0.05);
+        color = isDark
+            ? Colors.white.withValues(alpha: 0.05)
+            : Colors.black.withValues(alpha: 0.05);
         break;
       case NodeType.wall:
         color = Colors.grey[800]!;
@@ -424,12 +427,20 @@ class PathfindingLabView extends StatelessWidget {
             ? Icon(
                 icon,
                 size: 10.sp,
-                color: Colors.white.withValues(alpha: 0.8),
+                color:
+                    (node.type == NodeType.start || node.type == NodeType.end)
+                    ? Colors.white
+                    : (isDark
+                          ? Colors.white.withValues(alpha: 0.8)
+                          : Colors.black.withValues(alpha: 0.8)),
               )
             : (node.g != double.infinity && node.type != NodeType.empty
                   ? Text(
                       node.f.toInt().toString(),
-                      style: TextStyle(fontSize: 6.sp, color: Colors.white38),
+                      style: TextStyle(
+                        fontSize: 6.sp,
+                        color: isDark ? Colors.white38 : Colors.black38,
+                      ),
                     )
                   : null),
       ),

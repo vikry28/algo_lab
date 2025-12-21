@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_localizations.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../domain/entities/array_item.dart';
@@ -16,6 +17,7 @@ class SpecializedVisualizer extends StatelessWidget {
   final StepType? highlightType;
   final Color compareColor;
   final Color swapColor;
+  final bool isDark;
 
   const SpecializedVisualizer({
     super.key,
@@ -27,6 +29,7 @@ class SpecializedVisualizer extends StatelessWidget {
     this.highlightType,
     required this.compareColor,
     required this.swapColor,
+    required this.isDark,
   });
 
   @override
@@ -83,8 +86,10 @@ class SpecializedVisualizer extends StatelessWidget {
                           (isSwap ? swapColor : compareColor),
                         ]
                       : [
-                          Colors.blueAccent.withValues(alpha: 0.3),
-                          Colors.blueAccent.withValues(alpha: 0.1),
+                          (isDark ? Colors.blueAccent : AppColors.primary)
+                              .withValues(alpha: 0.3),
+                          (isDark ? Colors.blueAccent : AppColors.primary)
+                              .withValues(alpha: 0.1),
                         ],
                 ),
                 boxShadow: [
@@ -92,7 +97,9 @@ class SpecializedVisualizer extends StatelessWidget {
                     color:
                         (isHighlight
                                 ? (isSwap ? swapColor : compareColor)
-                                : Colors.blueAccent)
+                                : (isDark
+                                      ? Colors.blueAccent
+                                      : AppColors.primary))
                             .withValues(alpha: 0.2),
                     blurRadius: isHighlight ? 20 : 10,
                     spreadRadius: isHighlight ? 2 : 0,
@@ -132,9 +139,14 @@ class SpecializedVisualizer extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: (12 + (item.value / maxVal) * 4).sp,
-                      color: isHighlight ? Colors.white : Colors.white70,
-                      shadows: const [
-                        Shadow(blurRadius: 4, color: Colors.black26),
+                      color: isHighlight
+                          ? Colors.white
+                          : (isDark ? Colors.white70 : Colors.black87),
+                      shadows: [
+                        Shadow(
+                          blurRadius: 4,
+                          color: isDark ? Colors.black26 : Colors.white24,
+                        ),
                       ],
                     ),
                   ),
@@ -167,7 +179,9 @@ class SpecializedVisualizer extends StatelessWidget {
             final isMin = (highlightA == i);
             final color = isHighlight
                 ? (highlightType == StepType.swap ? swapColor : compareColor)
-                : Colors.orange.withValues(alpha: 0.2);
+                : (isDark
+                      ? Colors.orange.withValues(alpha: 0.2)
+                      : Colors.orange.withValues(alpha: 0.1));
 
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 3.w),
@@ -182,7 +196,9 @@ class SpecializedVisualizer extends StatelessWidget {
                       color: color,
                       borderRadius: BorderRadius.circular(6.r),
                       border: Border.all(
-                        color: isMin ? Colors.amberAccent : Colors.white12,
+                        color: isMin
+                            ? Colors.amberAccent
+                            : (isDark ? Colors.white12 : Colors.black12),
                         width: isMin ? 2 : 1,
                       ),
                       boxShadow: [
@@ -208,7 +224,7 @@ class SpecializedVisualizer extends StatelessWidget {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 12.sp,
-                            color: Colors.white,
+                            color: isDark ? Colors.white : Colors.black87,
                           ),
                         ),
                       ],
@@ -236,13 +252,16 @@ class SpecializedVisualizer extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.blueGrey.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(6.r),
-            border: Border.all(color: Colors.white12),
+            border: Border.all(color: isDark ? Colors.white12 : Colors.black12),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: List.generate(
               8,
-              (i) => Container(width: 2.w, color: Colors.white10),
+              (i) => Container(
+                width: 2.w,
+                color: isDark ? Colors.white10 : Colors.black12,
+              ),
             ),
           ),
         ),
@@ -250,7 +269,7 @@ class SpecializedVisualizer extends StatelessWidget {
         Text(
           t.translate('lab_searching_min'),
           style: AppTypography.labelSmall.copyWith(
-            color: Colors.white38,
+            color: isDark ? Colors.white38 : Colors.black38,
             letterSpacing: 2,
             fontWeight: FontWeight.w700,
           ),
@@ -287,13 +306,19 @@ class SpecializedVisualizer extends StatelessWidget {
                 colors: isHighlight
                     ? [swapColor.withValues(alpha: 0.9), swapColor]
                     : [
-                        Colors.indigo.withValues(alpha: 0.4),
-                        Colors.indigo.withValues(alpha: 0.2),
+                        (isDark ? Colors.indigo : AppColors.primary).withValues(
+                          alpha: 0.4,
+                        ),
+                        (isDark ? Colors.indigo : AppColors.primary).withValues(
+                          alpha: 0.2,
+                        ),
                       ],
               ),
               borderRadius: BorderRadius.circular(12.r),
               border: Border.all(
-                color: isHighlight ? Colors.white54 : Colors.white10,
+                color: isHighlight
+                    ? (isDark ? Colors.white54 : Colors.black54)
+                    : (isDark ? Colors.white10 : Colors.black12),
                 width: isHighlight ? 2 : 1,
               ),
               boxShadow: [
@@ -327,7 +352,9 @@ class SpecializedVisualizer extends StatelessWidget {
                   style: GoogleFonts.firaCode(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.sp,
-                    color: Colors.white,
+                    color: isHighlight
+                        ? Colors.white
+                        : (isDark ? Colors.white : Colors.black87),
                   ),
                 ),
                 if (isCompare)
@@ -383,8 +410,10 @@ class SpecializedVisualizer extends StatelessWidget {
                                 (isPivot ? Colors.pinkAccent : swapColor),
                               ]
                             : [
-                                Colors.cyanAccent.withValues(alpha: 0.4),
-                                Colors.cyanAccent.withValues(alpha: 0.1),
+                                (isDark ? Colors.cyanAccent : AppColors.primary)
+                                    .withValues(alpha: 0.4),
+                                (isDark ? Colors.cyanAccent : AppColors.primary)
+                                    .withValues(alpha: 0.1),
                               ],
                       ),
                       borderRadius: BorderRadius.vertical(
@@ -411,7 +440,7 @@ class SpecializedVisualizer extends StatelessWidget {
                             style: GoogleFonts.firaCode(
                               fontSize: 10.sp,
                               fontWeight: FontWeight.w900,
-                              color: Colors.white,
+                              color: isDark ? Colors.white : Colors.black87,
                               letterSpacing: 1,
                             ),
                           ),
