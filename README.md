@@ -5,6 +5,7 @@
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
 [![Clean Architecture](https://img.shields.io/badge/Clean-Architecture-blue?style=for-the-badge)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 [![State management - Provider](https://img.shields.io/badge/State%20Management-Provider-orange?style=for-the-badge)](https://pub.dev/packages/provider)
+[![CI/CD Status](https://github.com/vikry28/algo_lab/actions/workflows/main.yml/badge.svg)](https://github.com/vikry28/algo_lab/actions)
 
 **Algo Lab** is a state-of-the-art educational platform designed to bridge the gap between abstract algorithmic concepts and real-world application. Built with a stunning **Glassmorphism UI**, it provides an immersive learning experience through interactive visualizations and structured modules.
 
