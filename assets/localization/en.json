@@ -836,5 +836,11 @@
   "sha256_quiz_1_question": "Problem 1: Implement right rotate (ROTR)",
   "sha256_quiz_1_hint": "Implement 32-bit right rotate using bitwise shifts and OR.",
   "sha256_use_cases": "• Digital signatures\n• Blockchain (Bitcoin)\n• Password hashing (with salt)\n• File integrity verification",
-  "sha256_real_world": "Example: Bitcoin mining\nSHA-256 used to hash block headers."
+  "sha256_real_world": "Example: Bitcoin mining\nSHA-256 used to hash block headers.",
+  "notification_login_success": "Login successful! Welcome 🎉",
+  "notification_login_quick_success": "Quick login successful! 🚀",
+  "notification_login_cancelled": "Login cancelled",
+  "notification_login_failed": "Login failed: {error}",
+  "notification_logout_success": "Logged out successfully. See you soon! 👋",
+  "notification_logout_failed": "Logout failed: {error}"
 }

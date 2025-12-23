@@ -836,5 +836,11 @@
     "sha256_quiz_1_question": "Soal 1: Implementasikan rotasi kanan (ROTR)",
     "sha256_quiz_1_hint": "Implementasikan 32-bit right rotate menggunakan shift bitwise dan OR.",
     "sha256_use_cases": "• Tanda tangan digital\n• Blockchain (Bitcoin)\n• Hashing password (dengan salt)\n• Verifikasi integritas file",
-    "sha256_real_world": "Contoh: Menambang Bitcoin\nSHA-256 digunakan untuk hash header blok."
+    "sha256_real_world": "Contoh: Menambang Bitcoin\nSHA-256 digunakan untuk hash header blok.",
+    "notification_login_success": "Login berhasil! Selamat datang 🎉",
+    "notification_login_quick_success": "Login cepat berhasil! 🚀",
+    "notification_login_cancelled": "Login dibatalkan",
+    "notification_login_failed": "Login gagal: {error}",
+    "notification_logout_success": "Berhasil keluar. Sampai jumpa lagi! 👋",
+    "notification_logout_failed": "Logout gagal: {error}"
 }

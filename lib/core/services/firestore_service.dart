@@ -3,8 +3,11 @@ import '../../features/profile/data/models/user_model.dart';
 import 'package:logger/logger.dart';
 
 class FirestoreService {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseFirestore _db;
   final Logger _logger = Logger();
+
+  FirestoreService({FirebaseFirestore? firestore})
+    : _db = firestore ?? FirebaseFirestore.instance;
 
   Future<void> createUser(UserModel user) async {
     try {

@@ -50,6 +50,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.4
   envied_generator: ^1.2.0
   build_runner: ^2.4.13
+  mockito: ^5.4.4
 
 flutter:
   uses-material-design: true

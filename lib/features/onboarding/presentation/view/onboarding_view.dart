@@ -26,7 +26,6 @@ class _OnboardingViewState extends State<OnboardingView> {
     });
   }
 
-
   Widget _buildPage(
     int pageIndex,
     OnboardingProvider provider,
@@ -89,13 +88,13 @@ class _OnboardingViewState extends State<OnboardingView> {
           onNext: provider.nextPage,
           onBack: provider.previousPage,
           onLogin: () async {
-            final success = await provider.googleLogin();
+            final success = await provider.googleLogin(context);
             if (success && context.mounted) {
               context.go('/home');
             }
           },
           onQuickLogin: () async {
-            final success = await provider.quickLogin();
+            final success = await provider.quickLogin(context);
             if (success && context.mounted) {
               context.go('/home');
             }

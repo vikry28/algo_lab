@@ -3,7 +3,7 @@ import '../../domain/entities/rsa_entity.dart';
 import '../../domain/usecases/rsa_usecase.dart';
 
 class RSAProvider extends ChangeNotifier {
-  final RSAUseCase _useCase = RSAUseCase();
+  final RSAUseCase _useCase;
 
   RSAKeyPair? keyPair;
   String inputMessage = "SECRET";
@@ -15,7 +15,7 @@ class RSAProvider extends ChangeNotifier {
 
   int currentBlockIdx = -1;
 
-  RSAProvider() {
+  RSAProvider({RSAUseCase? useCase}) : _useCase = useCase ?? RSAUseCase() {
     generateNewKeys();
   }
 

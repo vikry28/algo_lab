@@ -10,6 +10,7 @@ import '../../../../core/di/service_locator.dart';
 import '../../../learning/presentation/provider/learning_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import '../../../home/presentation/widget/modern_notification.dart';
 
 class LogoutSection extends StatelessWidget {
   final Color textSecondary;
@@ -33,11 +34,32 @@ class LogoutSection extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(18.r),
               onTap: () async {
-                await sl<AuthService>().signOut();
-                if (context.mounted) {
-                  await sl<ResetOnboardingUseCase>().call();
-                  await context.read<LearningProvider>().clearAllProgress();
-                  context.go('/onboard');
+                try {
+                  await sl<AuthService>().signOut();
+                  if (context.mounted) {
+                    final localizations = AppLocalizations.of(context);
+                    ModernNotification.show(
+                      context,
+                      message: localizations.translate(
+                        'notification_logout_success',
+                      ),
+                      type: ModernNotificationType.success,
+                    );
+                    await sl<ResetOnboardingUseCase>().call();
+                    await context.read<LearningProvider>().clearAllProgress();
+                    context.go('/onboard');
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    final localizations = AppLocalizations.of(context);
+                    ModernNotification.show(
+                      context,
+                      message: localizations
+                          .translate('notification_logout_failed')
+                          .replaceAll('{error}', e.toString()),
+                      type: ModernNotificationType.error,
+                    );
+                  }
                 }
               },
               child: Row(

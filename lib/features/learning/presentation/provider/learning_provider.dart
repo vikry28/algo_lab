@@ -14,17 +14,24 @@ import '../../../../core/di/service_locator.dart';
 class LearningProvider extends ChangeNotifier {
   final GetLearningItems getLearningItems;
   final Logger _logger = Logger();
+  final AuthService _authService;
+  final FirestoreService _firestoreService;
 
   StreamSubscription? _userStreamSubscription;
   StreamSubscription? _progressStreamSubscription;
   StreamSubscription? _authSubscription;
 
-  LearningProvider({required this.getLearningItems}) {
+  LearningProvider({
+    required this.getLearningItems,
+    AuthService? authService,
+    FirestoreService? firestoreService,
+  }) : _authService = authService ?? sl<AuthService>(),
+       _firestoreService = firestoreService ?? sl<FirestoreService>() {
     _init();
   }
 
   void _init() {
-    _authSubscription = sl<AuthService>().user.listen((user) {
+    _authSubscription = _authService.user.listen((user) {
       if (user != null) {
         _loadAllProgress();
         _startWatchingFirestoreStreams(user.uid);
@@ -39,7 +46,7 @@ class LearningProvider extends ChangeNotifier {
     _userStreamSubscription?.cancel();
     _progressStreamSubscription?.cancel();
 
-    final firestore = sl<FirestoreService>();
+    final firestore = _firestoreService;
 
     _userStreamSubscription = firestore.userStream(uid).listen((
       userModel,
@@ -304,8 +311,8 @@ class LearningProvider extends ChangeNotifier {
       notifyListeners(); // Immediate local UI update
 
       // 2. Sync with Firestore
-      final auth = sl<AuthService>();
-      final firestore = sl<FirestoreService>();
+      final auth = _authService;
+      final firestore = _firestoreService;
       if (auth.currentUser != null) {
         final uid = auth.currentUser!.uid;
         _logger.i("Syncing learning data with Firestore for: $uid");
@@ -408,10 +415,10 @@ class LearningProvider extends ChangeNotifier {
         _completedMap[id] = true;
         await prefs.setBool('${id}_completed', true);
         // Persist completed module to user's profile document for visibility in profile
-        final auth = sl<AuthService>();
+        final auth = _authService;
         if (auth.currentUser != null) {
           try {
-            await sl<FirestoreService>().addCompletedModule(
+            await _firestoreService.addCompletedModule(
               auth.currentUser!.uid,
               id,
             );
@@ -423,9 +430,9 @@ class LearningProvider extends ChangeNotifier {
 
       await _updateActivityStats(prefs, xpGained);
 
-      final auth = sl<AuthService>();
+      final auth = _authService;
       if (auth.currentUser != null) {
-        await sl<FirestoreService>().updateProgress(
+        await _firestoreService.updateProgress(
           auth.currentUser!.uid,
           UserProgressModel(
             moduleId: id,
@@ -451,10 +458,10 @@ class LearningProvider extends ChangeNotifier {
     await prefs.setString('user_last_learned_module_id', id);
 
     // Persist remote
-    final auth = sl<AuthService>();
+    final auth = _authService;
     if (auth.currentUser != null) {
       try {
-        await sl<FirestoreService>().updateUserStats(
+        await _firestoreService.updateUserStats(
           uid: auth.currentUser!.uid,
           streak: _streak,
           totalXP: _totalXP,
@@ -478,9 +485,9 @@ class LearningProvider extends ChangeNotifier {
     await prefs.setInt('user_total_xp', _totalXP);
     await prefs.setInt('user_today_xp', _todayXP);
 
-    final auth = sl<AuthService>();
+    final auth = _authService;
     if (auth.currentUser != null) {
-      await sl<FirestoreService>().updateUserStats(
+      await _firestoreService.updateUserStats(
         uid: auth.currentUser!.uid,
         streak: _streak,
         totalXP: _totalXP,
@@ -518,9 +525,9 @@ class LearningProvider extends ChangeNotifier {
       await prefs.setString('user_last_learn_date', todayStr);
     }
 
-    final auth = sl<AuthService>();
+    final auth = _authService;
     if (auth.currentUser != null) {
-      await sl<FirestoreService>().updateUserStats(
+      await _firestoreService.updateUserStats(
         uid: auth.currentUser!.uid,
         streak: _streak,
         totalXP: _totalXP,

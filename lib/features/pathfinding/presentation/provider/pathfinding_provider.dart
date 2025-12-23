@@ -5,7 +5,7 @@ import '../../domain/usecases/astar_usecase.dart';
 enum BrushMode { start, end, wall, weight, erase }
 
 class PathfindingProvider extends ChangeNotifier {
-  final AStarUseCase astarUseCase = AStarUseCase();
+  final AStarUseCase astarUseCase;
 
   int rows = 20;
   int cols = 15;
@@ -27,7 +27,8 @@ class PathfindingProvider extends ChangeNotifier {
   double totalPathCost = 0.0;
   Stopwatch stopwatch = Stopwatch();
 
-  PathfindingProvider() {
+  PathfindingProvider({AStarUseCase? useCase})
+    : astarUseCase = useCase ?? AStarUseCase() {
     _initGrid();
   }
 

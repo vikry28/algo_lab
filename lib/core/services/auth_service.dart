@@ -10,8 +10,20 @@ import 'firestore_service.dart';
 import '../../features/profile/data/models/user_model.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  final FirebaseAuth _auth;
+  final GoogleSignIn _googleSignIn;
+  final AnalyticsService _analyticsService;
+  final FirestoreService _firestoreService;
+
+  AuthService({
+    FirebaseAuth? firebaseAuth,
+    GoogleSignIn? googleSignIn,
+    AnalyticsService? analyticsService,
+    FirestoreService? firestoreService,
+  }) : _auth = firebaseAuth ?? FirebaseAuth.instance,
+       _googleSignIn = googleSignIn ?? GoogleSignIn.instance,
+       _analyticsService = analyticsService ?? sl<AnalyticsService>(),
+       _firestoreService = firestoreService ?? sl<FirestoreService>();
 
   bool get isPasswordAuth {
     final user = _auth.currentUser;
@@ -43,7 +55,7 @@ class AuthService {
         final result = await _auth.signInWithCredential(credential);
         if (result.user != null) {
           AppLogger.info("Google Sign In Successful: ${result.user?.email}");
-          sl<AnalyticsService>().logLogin('google');
+          _analyticsService.logLogin('google');
           await _syncUserToFirestore(result.user!);
         }
         return result;
@@ -86,7 +98,7 @@ class AuthService {
         AppLogger.info(
           "Persistent Guest Login Successful: ${result.user?.uid}",
         );
-        sl<AnalyticsService>().logLogin('quick_login');
+        _analyticsService.logLogin('quick_login');
         await _syncUserToFirestore(result.user!);
       }
       return result;
@@ -123,7 +135,7 @@ class AuthService {
       await _googleSignIn.signOut();
       await _auth.signOut();
       AppLogger.info("User signed out: $email");
-      sl<AnalyticsService>().logEvent(name: 'logout');
+      _analyticsService.logEvent(name: 'logout');
     } catch (e, stack) {
       AppLogger.error("Error in Sign Out", e, stack);
     }
@@ -133,7 +145,7 @@ class AuthService {
     try {
       final user = _auth.currentUser;
       if (user != null) {
-        await sl<FirestoreService>().deleteUser(user.uid);
+        await _firestoreService.deleteUser(user.uid);
 
         await user.delete();
         AppLogger.info("User account deleted successfully");
@@ -160,7 +172,7 @@ class AuthService {
   User? get currentUser => _auth.currentUser;
 
   Future<void> _syncUserToFirestore(User firebaseUser) async {
-    final firestoreService = sl<FirestoreService>();
+    final firestoreService = _firestoreService;
     final existingUser = await firestoreService.getUser(firebaseUser.uid);
 
     if (existingUser != null) {
