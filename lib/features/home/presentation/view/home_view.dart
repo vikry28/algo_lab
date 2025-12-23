@@ -68,7 +68,6 @@ class HomeView extends StatelessWidget {
 
                   SliverToBoxAdapter(child: SizedBox(height: 20.h)),
 
-                  // TITLE
                   SliverToBoxAdapter(
                     child: Text(
                       AppLocalizations.of(context).translate('home_title'),
@@ -120,7 +119,7 @@ class HomeView extends StatelessWidget {
                     padding: EdgeInsets.only(bottom: 150.h),
                     sliver: Consumer<HomeProvider>(
                       builder: (context, provider, child) {
-                        // Loading state
+                        final displayList = provider.filteredAlgorithms;
                         if (provider.loading) {
                           return SliverToBoxAdapter(
                             child: Center(
@@ -136,9 +135,6 @@ class HomeView extends StatelessWidget {
                           );
                         }
 
-                        final displayList = provider.filteredAlgorithms;
-
-                        // Empty state
                         if (displayList.isEmpty) {
                           return SliverToBoxAdapter(
                             child: Center(
@@ -159,7 +155,6 @@ class HomeView extends StatelessWidget {
                           );
                         }
 
-                        // Success state - show grid
                         final langCode = Localizations.localeOf(
                           context,
                         ).languageCode;
@@ -178,7 +173,6 @@ class HomeView extends StatelessWidget {
                             final algo = displayList[index];
                             final t = AppLocalizations.of(context);
 
-                            // Ambil index global dari list original
                             final globalIndex = provider.algorithms.indexOf(
                               algo,
                             );

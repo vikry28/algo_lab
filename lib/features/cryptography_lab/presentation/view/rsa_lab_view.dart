@@ -209,9 +209,24 @@ class RSALabView extends StatelessWidget {
         width: fullWidth ? double.infinity : null,
         padding: EdgeInsets.all(12.w),
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.05),
+          color: color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(14.r),
-          border: Border.all(color: color.withValues(alpha: 0.2)),
+          border: Border.all(color: color.withValues(alpha: 0.3)),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              color.withValues(alpha: 0.2),
+              color.withValues(alpha: 0.05),
+            ],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.1),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -430,9 +445,32 @@ class RSALabView extends StatelessWidget {
                     vertical: 8.h,
                   ),
                   decoration: BoxDecoration(
-                    color: isHighlight ? color : color.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8.r),
-                    border: Border.all(color: color.withValues(alpha: 0.3)),
+                    color: isHighlight ? color : color.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(
+                      color: color.withValues(alpha: isHighlight ? 0.8 : 0.2),
+                    ),
+                    gradient: isHighlight
+                        ? LinearGradient(
+                            colors: [color, color.withValues(alpha: 0.8)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          )
+                        : null,
+                    boxShadow: [
+                      if (isHighlight)
+                        BoxShadow(
+                          color: color.withValues(alpha: 0.4),
+                          blurRadius: 12,
+                          spreadRadius: 2,
+                          offset: const Offset(0, 4),
+                        ),
+                    ],
+                  ),
+                  transform: Matrix4.translationValues(
+                    0,
+                    isHighlight ? -5 : 0,
+                    0,
                   ),
                   child: Text(
                     items[i],

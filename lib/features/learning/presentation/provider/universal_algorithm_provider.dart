@@ -75,6 +75,11 @@ class UniversalAlgorithmProvider with ChangeNotifier {
         // Load progress
         await _loadProgress();
 
+        // Update last accessed time
+        if (_learningProvider != null) {
+          _learningProvider!.updateLastAccessed(algorithmId);
+        }
+
         // Initialize quiz controllers
         _userAnswers.clear();
         _quizResults.clear();

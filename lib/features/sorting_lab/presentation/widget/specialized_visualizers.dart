@@ -69,11 +69,19 @@ class SpecializedVisualizer extends StatelessWidget {
 
           return AnimatedScale(
             duration: const Duration(milliseconds: 300),
-            scale: isSwap ? 1.2 : 1.0,
+            scale: isSwap
+                ? 1.15
+                : (isHighlight ? 1.05 : 1.0), // Slight scale on highlight
+            curve: Curves.easeOutBack,
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               width: size,
               height: size,
+              transform: Matrix4.translationValues(
+                0,
+                isHighlight ? -8.0 : 0,
+                0,
+              ), // Jump effect
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
@@ -87,10 +95,11 @@ class SpecializedVisualizer extends StatelessWidget {
                         ]
                       : [
                           (isDark ? Colors.blueAccent : AppColors.primary)
-                              .withValues(alpha: 0.3),
+                              .withValues(alpha: 0.5), // Richer color
                           (isDark ? Colors.blueAccent : AppColors.primary)
-                              .withValues(alpha: 0.1),
+                              .withValues(alpha: 0.2),
                         ],
+                  stops: const [0.3, 1.0],
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -100,14 +109,17 @@ class SpecializedVisualizer extends StatelessWidget {
                                 : (isDark
                                       ? Colors.blueAccent
                                       : AppColors.primary))
-                            .withValues(alpha: 0.2),
-                    blurRadius: isHighlight ? 20 : 10,
+                            .withValues(alpha: isHighlight ? 0.5 : 0.3),
+                    blurRadius: isHighlight ? 25 : 15,
                     spreadRadius: isHighlight ? 2 : 0,
+                    offset: isHighlight
+                        ? const Offset(0, 10)
+                        : const Offset(0, 5),
                   ),
                   BoxShadow(
-                    color: Colors.white.withValues(alpha: 0.1),
-                    offset: const Offset(-2, -2),
-                    blurRadius: 4,
+                    color: Colors.white.withValues(alpha: 0.2),
+                    offset: const Offset(-4, -4),
+                    blurRadius: 8,
                   ),
                 ],
               ),
@@ -119,15 +131,15 @@ class SpecializedVisualizer extends StatelessWidget {
                     top: size * 0.15,
                     left: size * 0.15,
                     child: Container(
-                      width: size * 0.3,
-                      height: size * 0.3,
+                      width: size * 0.35,
+                      height: size * 0.35,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: [
-                            Colors.white.withValues(alpha: 0.4),
+                            Colors.white.withValues(alpha: 0.5),
                             Colors.white.withValues(alpha: 0.0),
                           ],
                         ),
@@ -138,14 +150,14 @@ class SpecializedVisualizer extends StatelessWidget {
                     item.value.toString(),
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
-                      fontSize: (12 + (item.value / maxVal) * 4).sp,
-                      color: isHighlight
-                          ? Colors.white
-                          : (isDark ? Colors.white70 : Colors.black87),
+                      fontSize: (14 + (item.value / maxVal) * 4)
+                          .sp, // Slightly larger text
+                      color: Colors.white,
                       shadows: [
                         Shadow(
                           blurRadius: 4,
-                          color: isDark ? Colors.black26 : Colors.white24,
+                          color: Colors.black45,
+                          offset: const Offset(1, 1),
                         ),
                       ],
                     ),
@@ -187,26 +199,53 @@ class SpecializedVisualizer extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 3.w),
               child: Stack(
                 alignment: Alignment.bottomCenter,
+                clipBehavior: Clip.none,
                 children: [
+                  // Scanning Beam Effect for Current Min
+                  if (isMin)
+                    Positioned(
+                      bottom: 0,
+                      child: Container(
+                        width: itemWidth.clamp(30, 45) + 10,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
+                              Colors.amberAccent.withValues(alpha: 0.3),
+                              Colors.amberAccent.withValues(alpha: 0.0),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
+                    curve: Curves.fastOutSlowIn,
                     width: itemWidth.clamp(30, 45),
-                    height: 50.h + (item.value / maxVal) * 30.h,
+                    height:
+                        50.h +
+                        (item.value / maxVal) * 30.h +
+                        (isMin ? 10.h : 0), // Pop up if Min
                     decoration: BoxDecoration(
                       color: color,
-                      borderRadius: BorderRadius.circular(6.r),
+                      borderRadius: BorderRadius.circular(8.r),
                       border: Border.all(
                         color: isMin
                             ? Colors.amberAccent
+                            : isHighlight
+                            ? Colors.white70
                             : (isDark ? Colors.white12 : Colors.black12),
-                        width: isMin ? 2 : 1,
+                        width: isMin || isHighlight ? 2 : 1,
                       ),
                       boxShadow: [
                         if (isHighlight)
                           BoxShadow(
-                            color: color.withValues(alpha: 0.3),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
+                            color: color.withValues(alpha: 0.5),
+                            blurRadius: 15,
+                            offset: const Offset(0, 6),
                           ),
                       ],
                     ),
@@ -214,9 +253,9 @@ class SpecializedVisualizer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.inventory_2_outlined,
+                          isMin ? Icons.star : Icons.inventory_2_outlined,
                           size: 14.sp,
-                          color: Colors.white38,
+                          color: isMin ? Colors.amberAccent : Colors.white38,
                         ),
                         SizedBox(height: 4.h),
                         Text(
@@ -232,11 +271,28 @@ class SpecializedVisualizer extends StatelessWidget {
                   ),
                   if (isMin)
                     Positioned(
-                      top: -24.h,
-                      child: Icon(
-                        Icons.keyboard_arrow_down,
-                        color: Colors.amberAccent,
-                        size: 20.sp,
+                      top: -30.h,
+                      child: AnimatedScale(
+                        duration: const Duration(milliseconds: 200),
+                        scale: 1.2,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.amber,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.amber.withValues(alpha: 0.5),
+                                blurRadius: 10,
+                              ),
+                            ],
+                          ),
+                          child: Icon(
+                            Icons.keyboard_arrow_down,
+                            color: Colors.black,
+                            size: 16.sp,
+                          ),
+                        ),
                       ),
                     ),
                 ],
@@ -373,7 +429,6 @@ class SpecializedVisualizer extends StatelessWidget {
     BuildContext context,
     BoxConstraints constraints,
   ) {
-    final t = AppLocalizations.of(context);
     final barPadding = 4.w;
     final itemWidth =
         (constraints.maxWidth - (items.length * barPadding * 2)) / items.length;
@@ -407,27 +462,33 @@ class SpecializedVisualizer extends StatelessWidget {
                             ? [
                                 (isPivot ? Colors.pinkAccent : swapColor)
                                     .withValues(alpha: 0.9),
-                                (isPivot ? Colors.pinkAccent : swapColor),
+                                (isPivot ? Colors.pinkAccent : swapColor)
+                                    .withValues(alpha: 0.6),
                               ]
                             : [
                                 (isDark ? Colors.cyanAccent : AppColors.primary)
-                                    .withValues(alpha: 0.4),
+                                    .withValues(alpha: 0.5),
                                 (isDark ? Colors.cyanAccent : AppColors.primary)
                                     .withValues(alpha: 0.1),
                               ],
                       ),
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(8.r),
+                        bottom: Radius.circular(4.r),
                       ),
                       boxShadow: [
                         if (isHighlight)
                           BoxShadow(
                             color: (isPivot ? Colors.pinkAccent : swapColor)
-                                .withValues(alpha: 0.4),
+                                .withValues(alpha: 0.5),
                             blurRadius: 15,
                             spreadRadius: 1,
+                            offset: const Offset(0, -5),
                           ),
                       ],
+                      border: isPivot
+                          ? Border.all(color: Colors.white, width: 2)
+                          : null,
                     ),
                     child: Align(
                       alignment: Alignment.topCenter,
@@ -440,7 +501,7 @@ class SpecializedVisualizer extends StatelessWidget {
                             style: GoogleFonts.firaCode(
                               fontSize: 10.sp,
                               fontWeight: FontWeight.w900,
-                              color: isDark ? Colors.white : Colors.black87,
+                              color: Colors.white,
                               letterSpacing: 1,
                             ),
                           ),
@@ -450,19 +511,26 @@ class SpecializedVisualizer extends StatelessWidget {
                   ),
                   SizedBox(height: 8.h),
                   if (isPivot)
-                    Container(
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
                       padding: EdgeInsets.symmetric(
-                        horizontal: 4.w,
-                        vertical: 2.h,
+                        horizontal: 8.w,
+                        vertical: 4.h,
                       ),
                       decoration: BoxDecoration(
                         color: Colors.pinkAccent,
-                        borderRadius: BorderRadius.circular(4.r),
+                        borderRadius: BorderRadius.circular(12.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.pinkAccent.withValues(alpha: 0.5),
+                            blurRadius: 10,
+                          ),
+                        ],
                       ),
                       child: Text(
-                        t.translate('lab_pivot'),
+                        "PIVOT",
                         style: TextStyle(
-                          fontSize: 7.sp,
+                          fontSize: 8.sp,
                           fontWeight: FontWeight.w900,
                           color: Colors.white,
                         ),

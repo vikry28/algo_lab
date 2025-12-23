@@ -416,12 +416,41 @@ class PathfindingLabView extends StatelessWidget {
     }
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeOutCubic,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(2.r),
-        border: Border.all(color: Colors.white10, width: 0.5),
+        borderRadius: BorderRadius.circular(
+          node.type == NodeType.wall ? 4.r : 2.r,
+        ),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.1),
+          width: 0.5,
+        ),
+        boxShadow:
+            (node.type == NodeType.path ||
+                node.type == NodeType.start ||
+                node.type == NodeType.end)
+            ? [
+                BoxShadow(
+                  color: color.withValues(alpha: 0.6),
+                  blurRadius: 8,
+                  spreadRadius: 1,
+                ),
+              ]
+            : (node.type == NodeType.wall
+                  ? [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.3),
+                        blurRadius: 2,
+                        offset: const Offset(1, 1),
+                      ),
+                    ]
+                  : null),
       ),
+      transform: node.type == NodeType.wall
+          ? Matrix4.translationValues(0, -2, 0)
+          : Matrix4.identity(),
       child: Center(
         child: icon != null
             ? Icon(
@@ -434,7 +463,10 @@ class PathfindingLabView extends StatelessWidget {
                           ? Colors.white.withValues(alpha: 0.8)
                           : Colors.black.withValues(alpha: 0.8)),
               )
-            : (node.g != double.infinity && node.type != NodeType.empty
+            : (node.g != double.infinity &&
+                      node.type != NodeType.empty &&
+                      node.type != NodeType.visited &&
+                      node.type != NodeType.searching
                   ? Text(
                       node.f.toInt().toString(),
                       style: TextStyle(

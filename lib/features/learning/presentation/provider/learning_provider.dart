@@ -439,6 +439,38 @@ class LearningProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> updateLastAccessed(String id) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // Update local state
+    _lastLearnTimestamp = DateTime.now().millisecondsSinceEpoch;
+    _lastLearnedModuleId = id;
+
+    // Persist local
+    await prefs.setInt('user_last_learn_timestamp', _lastLearnTimestamp);
+    await prefs.setString('user_last_learned_module_id', id);
+
+    // Persist remote
+    final auth = sl<AuthService>();
+    if (auth.currentUser != null) {
+      try {
+        await sl<FirestoreService>().updateUserStats(
+          uid: auth.currentUser!.uid,
+          streak: _streak,
+          totalXP: _totalXP,
+          todayXP: _todayXP,
+          lastLearnDate: _lastLearnDate,
+          lastLearnTimestamp: _lastLearnTimestamp,
+          lastLearnedModuleId: _lastLearnedModuleId,
+        );
+      } catch (e) {
+        _logger.e('Error updating last accessed stats: $e');
+      }
+    }
+
+    notifyListeners();
+  }
+
   Future<void> addXP(int amount) async {
     final prefs = await SharedPreferences.getInstance();
     _totalXP += amount;
