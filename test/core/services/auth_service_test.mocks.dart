@@ -2,7 +2,7 @@
 // in algo_lab/test/core/services/auth_service_test.dart.
 // Do not manually edit this file.
 
-// ignore_for_file: duplicate_ignore, no_leading_underscores_for_library_prefixes
+// ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i8;
 
 import 'package:algo_lab/core/services/analytics_service.dart' as _i11;
