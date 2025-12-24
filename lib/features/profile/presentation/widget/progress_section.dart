@@ -74,7 +74,8 @@ class ProgressSection extends StatelessWidget {
                     isDark: isDark,
                     iconBg: AppColors.primary.withValues(alpha: 0.15),
                     emoji: '📚',
-                    value: '10/21',
+                    value:
+                        '${learningProvider.completedCount}/${learningProvider.totalModulesCount}',
                     label: AppLocalizations.of(
                       context,
                     ).translate('profile_algorithms'),

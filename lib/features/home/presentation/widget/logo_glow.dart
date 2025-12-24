@@ -51,7 +51,7 @@ class LogoGlow extends StatelessWidget {
             ),
           ),
           child: Center(
-            child: AppImage(src: ImagePaths.logo2, width: 85, height: 85),
+            child: AppImage(src: ImagePaths.logo, width: 85, height: 85),
           ),
         ),
       ],

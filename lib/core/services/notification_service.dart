@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import '../config/prefs.dart';
 import '../utils/app_logger.dart';
 import '../constants/app_localizations.dart';
+import '../di/service_locator.dart';
+import 'firestore_service.dart';
+import 'auth_service.dart';
 
 class NotificationService {
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
@@ -31,6 +34,15 @@ class NotificationService {
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       AppLogger.info('User granted permission for notifications');
     }
+
+    // Setup for Android Channel
+    const AndroidNotificationChannel channel = AndroidNotificationChannel(
+      'algolab_high_importance_channel',
+      'AlgoLab High Importance Notifications',
+      description:
+          'This channel is used for important algorithm notifications.',
+      importance: Importance.max,
+    );
 
     const AndroidInitializationSettings androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -63,16 +75,53 @@ class NotificationService {
           .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin
           >();
+      await androidPlugin?.createNotificationChannel(channel);
       await androidPlugin?.requestNotificationsPermission();
     }
 
+    // Listeners
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      AppLogger.info(
+        'Foreground message received: ${message.notification?.title}',
+      );
       if (getNotificationStatus()) {
         _showLocalNotification(message);
       }
     });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      AppLogger.info('App opened from notification: ${message.data}');
+      onNotificationClick?.call(
+        message.data['payload'] ?? message.data.toString(),
+      );
+    });
+
+    // Initial message
+    _messaging.getInitialMessage().then((RemoteMessage? message) {
+      if (message != null) {
+        AppLogger.info('App started from terminated state via notification');
+        onNotificationClick?.call(
+          message.data['payload'] ?? message.data.toString(),
+        );
+      }
+    });
+
+    // Token Refresh logic
+    _messaging.onTokenRefresh.listen((newToken) {
+      _updateTokenInFirestore(newToken);
+    });
+  }
+
+  Future<void> _updateTokenInFirestore(String token) async {
+    final firestore = sl<FirestoreService>();
+    final auth = sl<AuthService>();
+    final user = auth.currentUser;
+    if (user != null) {
+      await firestore.updateFcmToken(user.uid, token);
+      AppLogger.info('FCM Token updated in Firestore on refresh');
+    }
   }
 
   bool getNotificationStatus() {
@@ -91,9 +140,18 @@ class NotificationService {
   Future<String?> getToken() async {
     try {
       if (kIsWeb) return null;
-      return await _messaging.getToken();
+      final token = await _messaging.getToken();
+      if (kDebugMode) {
+        AppLogger.info('--- FCM DEBUG INFO ---');
+        AppLogger.info('FCM Token: $token');
+        AppLogger.info('----------------------');
+      }
+      return token;
     } catch (e) {
-      AppLogger.error('Error getting FCM token', e);
+      AppLogger.error(
+        'CRITICAL: FCM Token retrieval failed. This is usually due to missing SHA-1 in Firebase Console.',
+        e,
+      );
       return null;
     }
   }
@@ -101,8 +159,9 @@ class NotificationService {
   Future<void> _showLocalNotification(RemoteMessage message) async {
     const AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
-          'algolab_channel',
+          'algolab_high_importance_channel',
           'AlgoLab Notifications',
+          channelDescription: 'Algorithm learning updates and reminders',
           importance: Importance.max,
           priority: Priority.high,
           showWhen: true,
@@ -156,8 +215,9 @@ class NotificationService {
   }) async {
     const AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
-          'algolab_channel',
+          'algolab_high_importance_channel',
           'AlgoLab Notifications',
+          channelDescription: 'Algorithm learning updates and reminders',
           importance: Importance.max,
           priority: Priority.high,
           showWhen: true,

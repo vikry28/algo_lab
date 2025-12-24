@@ -64,13 +64,14 @@ class SummarySection extends StatelessWidget {
                     title: AppLocalizations.of(
                       context,
                     ).translate('summary_completed'),
-                    value: "10/${learningProvider.totalModulesCount}",
+                    value:
+                        "${learningProvider.completedCount}/${learningProvider.totalModulesCount}",
                     subtitle:
-                        "48% ${AppLocalizations.of(context).translate('summary_total_progress')}",
+                        "${(learningProvider.overallProgressPercentage * 100).toStringAsFixed(0)}% ${AppLocalizations.of(context).translate('summary_total_progress')}",
                     emoji: "📚",
                     iconColor: Colors.blueAccent,
                     isDark: isDark,
-                    progress: 48 / 100,
+                    progress: learningProvider.overallProgressPercentage,
                     gradientColor: Colors.blueAccent,
                   ),
                 ),

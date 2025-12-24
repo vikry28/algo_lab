@@ -294,7 +294,9 @@ class AchievementsView extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                achievementProvider.userRank,
+                AppLocalizations.of(
+                  context,
+                ).translate(achievementProvider.userRank),
                 style: AppTypography.bodySmall.copyWith(
                   color: textPrimary,
                   fontWeight: FontWeight.w600,

@@ -44,6 +44,9 @@ class _HomeShellState extends State<HomeShell> {
     final id = _achievementProvider?.lastUnlockedBadge;
     if (id == null) return;
 
+    // Only show dialog if currently on Home tab
+    if (_currentIndex != 0) return;
+
     final badge = _achievementProvider!.badges.firstWhere(
       (b) => b.id == id,
       orElse: () => _achievementProvider!.badges.first,
@@ -54,6 +57,8 @@ class _HomeShellState extends State<HomeShell> {
         if (!mounted) return;
         showDialog(
           context: context,
+          barrierColor: Colors.black.withValues(alpha: 0.1),
+          barrierDismissible: false,
           builder: (c) => BadgeUnlockedDialog(badge: badge),
         );
         _achievementProvider?.clearLastUnlockedBadge();

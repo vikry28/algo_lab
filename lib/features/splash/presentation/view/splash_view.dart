@@ -181,14 +181,25 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
                         ),
                       ),
                       6.verticalSpace,
-                      Text(
-                        "LEARN LOGIC",
-                        style: AppTypography.bodySmall.copyWith(
-                          color: textSecondary,
-                          fontSize: 12.sp,
-                          letterSpacing: 5,
+                      if (provider.state == SplashState.authenticating)
+                        Text(
+                          "AUTHENTICATING...",
+                          style: AppTypography.bodySmall.copyWith(
+                            color: AppColors.primary,
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2,
+                          ),
+                        )
+                      else
+                        Text(
+                          "LEARN LOGIC",
+                          style: AppTypography.bodySmall.copyWith(
+                            color: textSecondary,
+                            fontSize: 12.sp,
+                            letterSpacing: 5,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),

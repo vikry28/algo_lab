@@ -23,7 +23,11 @@ class ProviderFactory {
 
       // ========== SPLASH PROVIDER ==========
       ChangeNotifierProvider(
-        create: (_) => SplashProvider(checkOnboardingStatusUseCase: sl()),
+        create: (_) => SplashProvider(
+          checkOnboardingStatusUseCase: sl(),
+          authService: sl(),
+          getProfileUseCase: sl(),
+        ),
       ),
 
       // ========== ONBOARDING PROVIDER ==========

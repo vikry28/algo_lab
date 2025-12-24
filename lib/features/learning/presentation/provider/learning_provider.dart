@@ -55,35 +55,59 @@ class LearningProvider extends ChangeNotifier {
       try {
         final prefs = await SharedPreferences.getInstance();
         bool changed = false;
-        if (userModel.totalXP != _totalXP && userModel.totalXP > _totalXP) {
+
+        // SMART SYNC: Merge local guest progress with Firestore
+        bool needsCloudUpdate = false;
+
+        if (userModel.totalXP > _totalXP) {
           _totalXP = userModel.totalXP;
           await prefs.setInt('user_total_xp', _totalXP);
           changed = true;
+        } else if (_totalXP > userModel.totalXP) {
+          needsCloudUpdate = true;
         }
-        if (userModel.streak != _streak && userModel.streak >= 0) {
+
+        if (userModel.streak > _streak) {
           _streak = userModel.streak;
           await prefs.setInt('user_streak', _streak);
           changed = true;
+        } else if (_streak > userModel.streak) {
+          needsCloudUpdate = true;
         }
-        if (userModel.todayXP != _todayXP) {
+
+        if (userModel.todayXP > _todayXP) {
           _todayXP = userModel.todayXP;
           await prefs.setInt('user_today_xp', _todayXP);
           changed = true;
+        } else if (_todayXP > userModel.todayXP) {
+          needsCloudUpdate = true;
         }
-        if (userModel.lastLearnTimestamp != _lastLearnTimestamp &&
-            userModel.lastLearnTimestamp > _lastLearnTimestamp) {
+
+        if (userModel.lastLearnTimestamp > _lastLearnTimestamp) {
           _lastLearnTimestamp = userModel.lastLearnTimestamp;
-          await prefs.setInt('user_last_learn_timestamp', _lastLearnTimestamp);
-          changed = true;
-        }
-        if (userModel.lastLearnedModuleId != null &&
-            userModel.lastLearnedModuleId != _lastLearnedModuleId) {
+          _lastLearnDate = userModel.lastLearnDate;
           _lastLearnedModuleId = userModel.lastLearnedModuleId;
-          await prefs.setString(
-            'user_last_learned_module_id',
-            _lastLearnedModuleId!,
-          );
+          await prefs.setInt('user_last_learn_timestamp', _lastLearnTimestamp);
+          await prefs.setString('user_last_learn_date', _lastLearnDate);
+          if (_lastLearnedModuleId != null) {
+            await prefs.setString(
+              'user_last_learned_module_id',
+              _lastLearnedModuleId!,
+            );
+          }
           changed = true;
+        } else if (_lastLearnTimestamp > userModel.lastLearnTimestamp) {
+          needsCloudUpdate = true;
+        }
+
+        if (needsCloudUpdate) {
+          await _pushStatsToFirestore();
+        }
+
+        // Check if day changed while streaming
+        if (_checkAndResetDailyStats(prefs)) {
+          changed = true;
+          await _pushStatsToFirestore();
         }
 
         if (changed) notifyListeners();
@@ -98,26 +122,27 @@ class LearningProvider extends ChangeNotifier {
       try {
         final prefs = await SharedPreferences.getInstance();
         bool changed = false;
-        DateTime? latestSync;
         for (var p in progressList) {
           final localP = _progressMap[p.moduleId] ?? 0.0;
+          // Only update local if cloud is further, otherwise push local to cloud
           if (p.progress > localP) {
             _progressMap[p.moduleId] = p.progress;
             _completedMap[p.moduleId] = p.completed;
             await prefs.setDouble('${p.moduleId}_progress', p.progress);
             await prefs.setBool('${p.moduleId}_completed', p.completed);
             changed = true;
+          } else if (localP > p.progress) {
+            // Push local progress to cloud (merging guest progress)
+            await _firestoreService.updateProgress(
+              uid,
+              UserProgressModel(
+                moduleId: p.moduleId,
+                progress: localP,
+                completed: _completedMap[p.moduleId] ?? false,
+                lastUpdated: DateTime.now(),
+              ),
+            );
           }
-          if (latestSync == null || p.lastUpdated.isAfter(latestSync)) {
-            latestSync = p.lastUpdated;
-          }
-        }
-
-        if (latestSync != null &&
-            latestSync.millisecondsSinceEpoch > _lastLearnTimestamp) {
-          _lastLearnTimestamp = latestSync.millisecondsSinceEpoch;
-          await prefs.setInt('user_last_learn_timestamp', _lastLearnTimestamp);
-          changed = true;
         }
 
         if (changed) notifyListeners();
@@ -307,7 +332,9 @@ class LearningProvider extends ChangeNotifier {
       _lastLearnTimestamp = prefs.getInt('user_last_learn_timestamp') ?? 0;
       _lastLearnedModuleId = prefs.getString('user_last_learned_module_id');
 
-      _checkAndResetDailyStats(prefs);
+      if (_checkAndResetDailyStats(prefs)) {
+        await _pushStatsToFirestore();
+      }
       notifyListeners(); // Immediate local UI update
 
       // 2. Sync with Firestore
@@ -380,9 +407,10 @@ class LearningProvider extends ChangeNotifier {
     }
   }
 
-  void _checkAndResetDailyStats(SharedPreferences prefs) {
+  bool _checkAndResetDailyStats(SharedPreferences prefs) {
     final now = DateTime.now();
     final todayStr = "${now.year}-${now.month}-${now.day}";
+    bool changed = false;
     if (_lastLearnDate != todayStr) {
       if (_lastLearnDate.isNotEmpty) {
         final yesterday = now.subtract(const Duration(days: 1));
@@ -391,10 +419,34 @@ class LearningProvider extends ChangeNotifier {
         if (_lastLearnDate != yesterdayStr) {
           _streak = 0;
           prefs.setInt('user_streak', 0);
+          changed = true;
         }
       }
       _todayXP = 0;
       prefs.setInt('user_today_xp', 0);
+      _lastLearnDate = todayStr;
+      prefs.setString('user_last_learn_date', todayStr);
+      changed = true;
+    }
+    return changed;
+  }
+
+  Future<void> _pushStatsToFirestore() async {
+    final auth = _authService;
+    if (auth.currentUser != null) {
+      try {
+        await _firestoreService.updateUserStats(
+          uid: auth.currentUser!.uid,
+          streak: _streak,
+          totalXP: _totalXP,
+          todayXP: _todayXP,
+          lastLearnDate: _lastLearnDate,
+          lastLearnTimestamp: _lastLearnTimestamp,
+          lastLearnedModuleId: _lastLearnedModuleId,
+        );
+      } catch (e) {
+        _logger.e('Error pushing stats to Firestore: $e');
+      }
     }
   }
 
@@ -525,18 +577,7 @@ class LearningProvider extends ChangeNotifier {
       await prefs.setString('user_last_learn_date', todayStr);
     }
 
-    final auth = _authService;
-    if (auth.currentUser != null) {
-      await _firestoreService.updateUserStats(
-        uid: auth.currentUser!.uid,
-        streak: _streak,
-        totalXP: _totalXP,
-        todayXP: _todayXP,
-        lastLearnDate: _lastLearnDate,
-        lastLearnTimestamp: _lastLearnTimestamp,
-        lastLearnedModuleId: _lastLearnedModuleId,
-      );
-    }
+    await _pushStatsToFirestore();
   }
 
   Future<void> refreshProgress() async {
@@ -585,9 +626,8 @@ class LearningProvider extends ChangeNotifier {
 
   int get completedCount => _completedMap.values.where((c) => c).length;
   int get totalModulesCount => _allCategories.expand((c) => c.items).length;
-  int get overallProgressPercentage => totalModulesCount == 0
-      ? 0
-      : ((completedCount / totalModulesCount) * 100).round();
+  double get overallProgressPercentage =>
+      totalModulesCount == 0 ? 0.0 : (completedCount / totalModulesCount);
 
   int get currentLevel => _totalXP == 0 ? 1 : (_totalXP / 500).floor() + 1;
   double get levelProgress => (_totalXP % 500) / 500;

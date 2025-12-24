@@ -7,18 +7,46 @@ import '../../../../core/constants/app_typography.dart';
 import '../../../../core/constants/app_localizations.dart';
 import '../../../../core/services/auth_service.dart';
 import '../../../../core/di/service_locator.dart';
-import '../../../learning/presentation/provider/learning_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../home/presentation/widget/modern_notification.dart';
 
-class LogoutSection extends StatelessWidget {
+import 'package:flutter/foundation.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+
+class LogoutSection extends StatefulWidget {
   final Color textSecondary;
 
   const LogoutSection({super.key, required this.textSecondary});
 
   @override
+  State<LogoutSection> createState() => _LogoutSectionState();
+}
+
+class _LogoutSectionState extends State<LogoutSection> {
+  String _version = '1.0.0';
+  String _buildNumber = '1';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadVersion();
+  }
+
+  Future<void> _loadVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    if (mounted) {
+      setState(() {
+        _version = info.version;
+        _buildNumber = info.buildNumber;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // Determine the build tag (Beta or Release)
+    const String buildTag = kReleaseMode ? 'Release' : 'Beta';
+
     return Column(
       children: [
         Container(
@@ -46,7 +74,6 @@ class LogoutSection extends StatelessWidget {
                       type: ModernNotificationType.success,
                     );
                     await sl<ResetOnboardingUseCase>().call();
-                    await context.read<LearningProvider>().clearAllProgress();
                     context.go('/onboard');
                   }
                 } catch (e) {
@@ -88,9 +115,9 @@ class LogoutSection extends StatelessWidget {
 
         /// Version
         Text(
-          '${AppLocalizations.of(context).translate('profile_version')} 1.0.0 (Beta)',
+          '${AppLocalizations.of(context).translate('profile_version')} $_version ($_buildNumber) $buildTag',
           style: AppTypography.bodySmall.copyWith(
-            color: textSecondary.withValues(alpha: 0.4),
+            color: widget.textSecondary.withValues(alpha: 0.4),
           ),
         ),
       ],

@@ -7,6 +7,7 @@ import '../utils/app_logger.dart';
 import '../di/service_locator.dart';
 import 'analytics_service.dart';
 import 'firestore_service.dart';
+import 'notification_service.dart';
 import '../../features/profile/data/models/user_model.dart';
 
 class AuthService {
@@ -42,17 +43,29 @@ class AuthService {
         GoogleAuthProvider googleProvider = GoogleAuthProvider();
         return await _auth.signInWithPopup(googleProvider);
       } else {
-        await _googleSignIn.initialize(serverClientId: Env.webClientId);
+        await _googleSignIn.initialize(
+          clientId: defaultTargetPlatform == TargetPlatform.android
+              ? Env.androidClientId
+              : Env.iosClientId,
+          serverClientId: Env.webClientId,
+        );
 
         final GoogleSignInAccount googleUser = await _googleSignIn
             .authenticate();
-
         final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+
+        if (googleAuth.idToken == null) {
+          AppLogger.error(
+            "Google Sign In Error: idToken is null. Check configuration.",
+          );
+          return null;
+        }
+
         final AuthCredential credential = GoogleAuthProvider.credential(
           idToken: googleAuth.idToken,
         );
-
         final result = await _auth.signInWithCredential(credential);
+
         if (result.user != null) {
           AppLogger.info("Google Sign In Successful: ${result.user?.email}");
           _analyticsService.logLogin('google');
@@ -197,6 +210,18 @@ class AuthService {
       );
       await firestoreService.createUser(userModel);
       AppLogger.info("New user profile created: ${firebaseUser.uid}");
+    }
+
+    // Update FCM Token
+    try {
+      final notificationService = sl<NotificationService>();
+      final token = await notificationService.getToken();
+      if (token != null) {
+        await firestoreService.updateFcmToken(firebaseUser.uid, token);
+        AppLogger.info("FCM Token synced for user: ${firebaseUser.uid}");
+      }
+    } catch (e) {
+      AppLogger.error("Failed to sync FCM token on login", e);
     }
   }
 

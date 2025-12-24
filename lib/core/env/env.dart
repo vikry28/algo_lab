@@ -23,6 +23,9 @@ abstract class Env {
   @EnviedField(varName: 'ANDROID_MESSAGING_SENDER_ID', obfuscate: true)
   static final String androidMessagingSenderId = _Env.androidMessagingSenderId;
 
+  @EnviedField(varName: 'ANDROID_CLIENT_ID', obfuscate: true)
+  static final String androidClientId = _Env.androidClientId;
+
   // iOS
   @EnviedField(varName: 'IOS_API_KEY', obfuscate: true)
   static final String iosApiKey = _Env.iosApiKey;
@@ -32,6 +35,9 @@ abstract class Env {
 
   @EnviedField(varName: 'IOS_MESSAGING_SENDER_ID', obfuscate: true)
   static final String iosMessagingSenderId = _Env.iosMessagingSenderId;
+
+  @EnviedField(varName: 'IOS_CLIENT_ID', obfuscate: true)
+  static final String iosClientId = _Env.iosClientId;
 
   @EnviedField(varName: 'IOS_BUNDLE_ID', obfuscate: true)
   static final String iosBundleId = _Env.iosBundleId;

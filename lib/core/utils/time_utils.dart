@@ -59,6 +59,7 @@ class TimeUtils {
   static String timeAgo(
     int timestamp, {
     required String justNow,
+    required String secondsAgo,
     required String minsAgo,
     required String hoursAgo,
     required String daysAgo,
@@ -66,7 +67,9 @@ class TimeUtils {
     if (timestamp == 0) return justNow;
     final now = DateTime.now().millisecondsSinceEpoch;
     final diff = now - timestamp;
-    if (diff < 0) return justNow;
+
+    // Handle potential clock skews or very recent updates
+    if (diff < 5000) return justNow;
 
     final seconds = (diff / 1000).floor();
     final minutes = (seconds / 60).floor();
@@ -76,6 +79,8 @@ class TimeUtils {
     if (days > 0) return "$days $daysAgo";
     if (hours > 0) return "$hours $hoursAgo";
     if (minutes > 0) return "$minutes $minsAgo";
+    if (seconds > 0) return "$seconds $secondsAgo";
+
     return justNow;
   }
 }

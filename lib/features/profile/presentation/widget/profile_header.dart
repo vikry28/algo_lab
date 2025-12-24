@@ -5,7 +5,9 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../../../core/constants/app_localizations.dart';
 import '../../../../core/utils/app_image.dart';
-import '../provider/profile_provider.dart';
+import 'package:algo_lab/features/profile/presentation/provider/profile_provider.dart';
+import 'package:algo_lab/features/profile/presentation/provider/achievement_provider.dart';
+import 'package:algo_lab/features/learning/presentation/provider/learning_provider.dart';
 
 class ProfileHeader extends StatelessWidget {
   final bool isDark;
@@ -149,13 +151,15 @@ class ProfileHeader extends StatelessWidget {
                 size: 18.sp,
               ),
               SizedBox(width: 8.w),
-              Consumer<ProfileProvider>(
-                builder: (context, profileProvider, _) {
-                  final profile = profileProvider.profile;
-                  final level = profile?.level ?? 1;
-                  final rank = profile?.rank ?? 'Novice';
+              Consumer2<LearningProvider, AchievementProvider>(
+                builder: (context, learning, achievement, _) {
+                  final level = learning.currentLevel;
+                  final rankKey = achievement.userRank;
+                  final localizedRank = AppLocalizations.of(
+                    context,
+                  ).translate(rankKey);
                   return Text(
-                    '${AppLocalizations.of(context).translate('profile_level')} $level - $rank',
+                    '${AppLocalizations.of(context).translate('profile_level')} $level - $localizedRank',
                     style: AppTypography.labelSmall.copyWith(
                       color: textPrimary,
                       fontWeight: FontWeight.w600,

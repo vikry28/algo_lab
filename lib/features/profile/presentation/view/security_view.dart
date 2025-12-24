@@ -130,7 +130,9 @@ class _SecurityViewState extends State<SecurityView> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Your Account is Secure',
+                                        AppLocalizations.of(
+                                          context,
+                                        ).translate('security_status_title'),
                                         style: AppTypography.h2.copyWith(
                                           color: textPrimary,
                                           fontWeight: FontWeight.bold,
@@ -138,7 +140,9 @@ class _SecurityViewState extends State<SecurityView> {
                                       ),
                                       SizedBox(height: 4.h),
                                       Text(
-                                        'Everything looks good with your security settings.',
+                                        AppLocalizations.of(
+                                          context,
+                                        ).translate('security_status_subtitle'),
                                         style: AppTypography.bodySmall.copyWith(
                                           color: textSecondary,
                                         ),
@@ -152,15 +156,24 @@ class _SecurityViewState extends State<SecurityView> {
 
                           SizedBox(height: 32.h),
 
-                          _buildSectionLabel('Login & Recovery', textSecondary),
+                          _buildSectionLabel(
+                            AppLocalizations.of(
+                              context,
+                            ).translate('security_login_recovery'),
+                            textSecondary,
+                          ),
                           SizedBox(height: 12.h),
 
                           _buildGlassList([
                             _buildSecurityRow(
                               icon: Icons.vpn_key_outlined,
                               color: Colors.blue,
-                              title: 'Change Password',
-                              subtitle: 'Update your login credentials',
+                              title: AppLocalizations.of(
+                                context,
+                              ).translate('security_change_password'),
+                              subtitle: AppLocalizations.of(
+                                context,
+                              ).translate('security_change_password_subtitle'),
                               onTap: () => _showChangePasswordDialog(context),
                               isDark: isDark,
                             ),
@@ -168,12 +181,18 @@ class _SecurityViewState extends State<SecurityView> {
                             _buildSecurityRow(
                               icon: Icons.devices_rounded,
                               color: Colors.purple,
-                              title: 'Session Info',
-                              subtitle: 'Current device identified',
+                              title: AppLocalizations.of(
+                                context,
+                              ).translate('security_session_info'),
+                              subtitle: AppLocalizations.of(
+                                context,
+                              ).translate('security_session_info_subtitle'),
                               onTap: () {
                                 ModernNotification.show(
                                   context,
-                                  message: 'Session secured on this device',
+                                  message: AppLocalizations.of(
+                                    context,
+                                  ).translate('security_session_secured_msg'),
                                   type: ModernNotificationType.info,
                                 );
                               },
@@ -184,7 +203,9 @@ class _SecurityViewState extends State<SecurityView> {
                           SizedBox(height: 32.h),
 
                           _buildSectionLabel(
-                            'Advanced Security',
+                            AppLocalizations.of(
+                              context,
+                            ).translate('security_advanced'),
                             textSecondary,
                           ),
                           SizedBox(height: 12.h),
@@ -195,14 +216,18 @@ class _SecurityViewState extends State<SecurityView> {
                               final twoFactorEnabled =
                                   profile?.twoFactorEnabled ?? false;
                               final biometricEnabled =
-                                  profile?.biometricEnabled ?? true;
+                                  profile?.biometricEnabled ?? false;
 
                               return _buildGlassList([
                                 _buildSecurityRow(
                                   icon: Icons.app_registration_rounded,
                                   color: Colors.orange,
-                                  title: 'Two-Factor Auth',
-                                  subtitle: 'Requires email verification',
+                                  title: AppLocalizations.of(
+                                    context,
+                                  ).translate('security_2fa'),
+                                  subtitle: AppLocalizations.of(
+                                    context,
+                                  ).translate('security_2fa_subtitle'),
                                   isDark: isDark,
                                   trailing: ModernIOSSwitch(
                                     value: twoFactorEnabled,
@@ -223,8 +248,12 @@ class _SecurityViewState extends State<SecurityView> {
                                 _buildSecurityRow(
                                   icon: Icons.fingerprint_rounded,
                                   color: Colors.cyan,
-                                  title: 'Biometric Login',
-                                  subtitle: 'Face ID or Fingerprint',
+                                  title: AppLocalizations.of(
+                                    context,
+                                  ).translate('security_biometric'),
+                                  subtitle: AppLocalizations.of(
+                                    context,
+                                  ).translate('security_biometric_subtitle'),
                                   isDark: isDark,
                                   trailing: ModernIOSSwitch(
                                     value: biometricEnabled,
@@ -248,7 +277,9 @@ class _SecurityViewState extends State<SecurityView> {
                           SizedBox(height: 32.h),
 
                           _buildSectionLabel(
-                            'Danger Zone',
+                            AppLocalizations.of(
+                              context,
+                            ).translate('security_danger_zone'),
                             Colors.redAccent.withValues(alpha: 0.8),
                           ),
                           SizedBox(height: 12.h),
@@ -265,8 +296,12 @@ class _SecurityViewState extends State<SecurityView> {
                             child: _buildSecurityRow(
                               icon: Icons.delete_forever_rounded,
                               color: Colors.redAccent,
-                              title: 'Delete Account',
-                              subtitle: 'Permanently remove all your data',
+                              title: AppLocalizations.of(
+                                context,
+                              ).translate('security_delete_account'),
+                              subtitle: AppLocalizations.of(
+                                context,
+                              ).translate('security_delete_account_subtitle'),
                               isDark: isDark,
                               onTap: () => _showDeleteAccountDialog(context),
                             ),
@@ -395,16 +430,20 @@ class _SecurityViewState extends State<SecurityView> {
     Future<void> Function() action,
   ) async {
     final provider = context.read<ProfileProvider>();
+    final l10n = AppLocalizations.of(context);
     final authenticated = await provider.authenticateWithBiometrics();
     if (authenticated) {
       await action();
       if (context.mounted) {
-        ModernNotification.show(context, message: 'Security setting updated');
+        ModernNotification.show(
+          context,
+          message: l10n.translate('security_setting_updated'),
+        );
       }
     } else if (context.mounted) {
       ModernNotification.show(
         context,
-        message: 'Authentication failed',
+        message: l10n.translate('security_auth_failed'),
         type: ModernNotificationType.error,
       );
     }
@@ -412,10 +451,11 @@ class _SecurityViewState extends State<SecurityView> {
 
   void _showChangePasswordDialog(BuildContext context) {
     final provider = context.read<ProfileProvider>();
+    final l10n = AppLocalizations.of(context);
     if (!provider.canChangePassword) {
       ModernNotification.show(
         context,
-        message: 'Password change not available for this account type',
+        message: l10n.translate('security_password_not_available'),
         type: ModernNotificationType.info,
       );
       return;
@@ -424,19 +464,19 @@ class _SecurityViewState extends State<SecurityView> {
     showDialog(
       context: context,
       builder: (context) => ModernInputDialog(
-        title: 'Change Password',
-        message: 'Enter your new security password below',
+        title: l10n.translate('security_change_password_diag_title'),
+        message: l10n.translate('security_change_password_diag_msg'),
         icon: Icons.lock_reset_rounded,
         iconColor: Colors.blueAccent,
-        hintText: 'Minimum 6 characters',
+        hintText: l10n.translate('security_password_min_chars'),
         obscureText: true,
-        confirmLabel: 'UPDATE',
-        cancelLabel: 'CANCEL',
+        confirmLabel: l10n.translate('security_update'),
+        cancelLabel: l10n.translate('security_cancel'),
         onConfirm: (newPassword) async {
           if (newPassword.length < 6) {
             ModernNotification.show(
               context,
-              message: 'Password too short',
+              message: l10n.translate('security_password_too_short'),
               type: ModernNotificationType.error,
             );
             return;
@@ -446,14 +486,16 @@ class _SecurityViewState extends State<SecurityView> {
             if (context.mounted) {
               ModernNotification.show(
                 context,
-                message: 'Password updated successfully',
+                message: l10n.translate('security_password_updated'),
               );
             }
           } catch (e) {
             if (context.mounted) {
               ModernNotification.show(
                 context,
-                message: 'Error: $e',
+                message: l10n
+                    .translate('security_error')
+                    .replaceAll('{error}', e.toString()),
                 type: ModernNotificationType.error,
               );
             }
@@ -464,16 +506,16 @@ class _SecurityViewState extends State<SecurityView> {
   }
 
   void _showDeleteAccountDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     showDialog(
       context: context,
       builder: (context) => ModernConfirmDialog(
-        title: 'Delete Account?',
-        message:
-            'This action is PERMANENT. All your progress, XP, and badges will be lost forever.',
+        title: l10n.translate('security_delete_account_diag_title'),
+        message: l10n.translate('security_delete_account_diag_msg'),
         icon: Icons.warning_amber_rounded,
         iconColor: Colors.redAccent,
-        confirmLabel: 'DELETE',
-        cancelLabel: 'KEEP ACCOUNT',
+        confirmLabel: l10n.translate('security_delete'),
+        cancelLabel: l10n.translate('security_keep_account'),
         onConfirm: () async {
           final provider = context.read<ProfileProvider>();
           try {
@@ -482,14 +524,16 @@ class _SecurityViewState extends State<SecurityView> {
               context.go('/onboard');
               ModernNotification.show(
                 context,
-                message: 'Account deleted permanently',
+                message: l10n.translate('security_account_deleted'),
               );
             }
           } catch (e) {
             if (context.mounted) {
               ModernNotification.show(
                 context,
-                message: 'Failed to delete: $e',
+                message: l10n
+                    .translate('security_delete_failed')
+                    .replaceAll('{error}', e.toString()),
                 type: ModernNotificationType.error,
               );
             }

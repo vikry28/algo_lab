@@ -177,11 +177,11 @@ class AchievementProvider with ChangeNotifier {
 
   String get userRank {
     final xp = learningProvider.totalXP;
-    if (xp >= 5000) return 'Master Algoritma';
-    if (xp >= 2000) return 'Elite Pro';
-    if (xp >= 1000) return 'Spesialis';
-    if (xp >= 500) return 'Apprentice';
-    return 'Novice';
+    if (xp >= 5000) return 'rank_master';
+    if (xp >= 2000) return 'rank_elite_pro';
+    if (xp >= 1000) return 'rank_specialist';
+    if (xp >= 500) return 'rank_apprentice';
+    return 'rank_novice';
   }
 
   String get globalRanking {

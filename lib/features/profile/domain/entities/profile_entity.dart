@@ -29,7 +29,7 @@ class ProfileEntity {
     required this.lastLearnDate,
     this.lastLogin,
     this.twoFactorEnabled = false,
-    this.biometricEnabled = true,
+    this.biometricEnabled = false,
     this.level = 1,
     this.rank = "Novice",
     this.lastLearnTimestamp = 0,
