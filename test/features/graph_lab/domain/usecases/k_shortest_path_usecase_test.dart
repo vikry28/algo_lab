@@ -53,7 +53,8 @@ void main() {
       ];
       final steps = useCase.execute(lonelyNodes, [], 'A', 'Z');
 
-      expect(steps.last.description, "Tidak ditemukan jalur valid.");
+      expect(steps.last.description, "No valid paths found.");
+      expect(steps.last.descKey, "graph_sys_kpath_no_path");
     });
   });
 }

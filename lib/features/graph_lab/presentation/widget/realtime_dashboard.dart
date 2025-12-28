@@ -152,7 +152,7 @@ class RealtimeDashboard extends StatelessWidget {
         ),
         SizedBox(width: 4.w),
         Text(
-          t.translate('graph_label_live'),
+          'LIVE',
           style: TextStyle(
             color: Colors.grey,
             fontSize: 12.sp,

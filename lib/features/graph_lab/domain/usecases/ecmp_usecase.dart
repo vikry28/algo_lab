@@ -29,7 +29,8 @@ class ECMPUseCase {
       DijkstraStep(
         nodes: _cloneNodes(nodes),
         edges: _cloneEdges(edges),
-        description: "Memulai analisis Equal-Cost Multi-Path (ECMP)...",
+        description: "Starting Equal-Cost Multi-Path (ECMP) analysis...",
+        descKey: 'graph_sys_ecmp_start',
       ),
     );
 
@@ -49,7 +50,8 @@ class ECMPUseCase {
         DijkstraStep(
           nodes: nodes,
           edges: edges,
-          description: "Tidak ada jalur tersedia.",
+          description: "No available paths.",
+          descKey: 'graph_sys_ecmp_no_path',
         ),
       );
       return steps;
@@ -93,7 +95,9 @@ class ECMPUseCase {
         nodes: _cloneNodes(nodes),
         edges: _cloneEdges(edges),
         description:
-            "Ditemukan ${validPaths.length} jalur dengan cost seimbang (±5%).",
+            "Found ${validPaths.length} paths with balanced cost (±5%).",
+        descKey: 'graph_sys_ecmp_found',
+        descArgs: {'count': validPaths.length.toString()},
       ),
     );
 
@@ -135,7 +139,9 @@ class ECMPUseCase {
         nodes: currentNodes,
         edges: currentEdges,
         description:
-            "Load balancing traffic aktif di ${validPaths.length} jalur.",
+            "Load balancing traffic active across ${validPaths.length} paths.",
+        descKey: 'graph_sys_ecmp_active',
+        descArgs: {'count': validPaths.length.toString()},
         targetNodeId: targetNodeId,
       ),
     );

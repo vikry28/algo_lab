@@ -72,7 +72,8 @@ void main() {
 
       final steps = useCase.execute(isolatedNodes, noEdges, 'A', 'X');
 
-      expect(steps.last.description, "Tidak ditemukan rute yang tersedia.");
+      expect(steps.last.description, "No available route found.");
+      expect(steps.last.descKey, "graph_sys_no_path");
       final nodeX = steps.last.nodes.firstWhere((n) => n.id == 'X');
       expect(nodeX.distance, double.infinity);
     });

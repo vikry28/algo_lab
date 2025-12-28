@@ -30,7 +30,9 @@ class KShortestPathUseCase {
       DijkstraStep(
         nodes: _cloneNodes(nodes),
         edges: _cloneEdges(edges),
-        description: "Menganalisis top $k jalur rute alternatif...",
+        description: "Analyzing top $k alternative route paths...",
+        descKey: 'graph_sys_kpath_start',
+        descArgs: {'k': k.toString()},
       ),
     );
 
@@ -80,7 +82,8 @@ class KShortestPathUseCase {
         DijkstraStep(
           nodes: _cloneNodes(nodes),
           edges: _cloneEdges(edges),
-          description: "Tidak ditemukan jalur valid.",
+          description: "No valid paths found.",
+          descKey: 'graph_sys_kpath_no_path',
         ),
       );
       return steps;
@@ -122,6 +125,12 @@ class KShortestPathUseCase {
           edges: currentEdges,
           description:
               "Path #${i + 1}: ${cost.toInt()}ms latency via ${path.length} hops.",
+          descKey: 'graph_sys_kpath_detail',
+          descArgs: {
+            'i': (i + 1).toString(),
+            'latency': cost.toInt().toString(),
+            'hops': path.length.toString(),
+          },
           activeNodeId: targetNodeId,
         ),
       );
@@ -144,7 +153,8 @@ class KShortestPathUseCase {
       DijkstraStep(
         nodes: finalNodes,
         edges: finalEdges,
-        description: "Analisis K-Path selesai. Jalur terbaik dipilih.",
+        description: "K-Path analysis complete. Best paths selected.",
+        descKey: 'graph_sys_kpath_complete',
         targetNodeId: targetNodeId,
       ),
     );

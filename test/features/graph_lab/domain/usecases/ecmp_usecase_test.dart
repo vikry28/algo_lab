@@ -30,7 +30,11 @@ void main() {
       final steps = useCase.execute(nodes, edges, 'A', 'D');
 
       expect(
-        steps.any((s) => s.description.contains('Ditemukan 2 jalur')),
+        steps.any(
+          (s) =>
+              s.descKey == 'graph_sys_ecmp_found' &&
+              s.description.contains('Found 2 paths'),
+        ),
         true,
       );
 
@@ -53,7 +57,11 @@ void main() {
 
       final steps = useCase.execute(nodes, edges, 'A', 'D');
       expect(
-        steps.any((s) => s.description.contains('Ditemukan 2 jalur')),
+        steps.any(
+          (s) =>
+              s.descKey == 'graph_sys_ecmp_found' &&
+              s.description.contains('Found 2 paths'),
+        ),
         true,
       );
     });
@@ -70,7 +78,11 @@ void main() {
 
       final steps = useCase.execute(nodes, edges, 'A', 'D');
       expect(
-        steps.any((s) => s.description.contains('Ditemukan 1 jalur')),
+        steps.any(
+          (s) =>
+              s.descKey == 'graph_sys_ecmp_found' &&
+              s.description.contains('Found 1 paths'),
+        ),
         true,
       );
     });

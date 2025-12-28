@@ -980,5 +980,13 @@
     "graph_node_sg_cable": "SG Cable Station",
     "graph_node_sg_edge1": "SG Edge 1",
     "graph_node_sg_edge2": "SG Edge 2",
-    "graph_node_singapore": "Singapore DC"
+    "graph_node_singapore": "Singapore DC",
+    "graph_sys_kpath_start": "Menganalisis top {k} jalur rute alternatif...",
+    "graph_sys_kpath_no_path": "Tidak ditemukan jalur valid.",
+    "graph_sys_kpath_detail": "Jalur #{i}: Latensi {latency}ms melalui {hops} hop.",
+    "graph_sys_kpath_complete": "Analisis K-Path selesai. Jalur terbaik dipilih.",
+    "graph_sys_ecmp_start": "Memulai analisis Equal-Cost Multi-Path (ECMP)...",
+    "graph_sys_ecmp_no_path": "Tidak ada jalur tersedia.",
+    "graph_sys_ecmp_found": "Ditemukan {count} jalur dengan cost seimbang (±5%).",
+    "graph_sys_ecmp_active": "Load balancing traffic aktif di {count} jalur."
 }

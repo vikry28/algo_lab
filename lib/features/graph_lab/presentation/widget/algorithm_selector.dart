@@ -40,7 +40,7 @@ class AlgorithmSelector extends StatelessWidget {
             child: Text(
               t.translate('graph_algo_mode'),
               style: TextStyle(
-                color: Colors.white70,
+                color: Colors.grey,
                 fontSize: 10.sp,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1,

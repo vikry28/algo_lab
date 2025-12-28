@@ -980,5 +980,13 @@
   "graph_node_sg_cable": "SG Cable Station",
   "graph_node_sg_edge1": "SG Edge 1",
   "graph_node_sg_edge2": "SG Edge 2",
-  "graph_node_singapore": "Singapore DC"
+  "graph_node_singapore": "Singapore DC",
+  "graph_sys_kpath_start": "Analyzing top {k} alternative route paths...",
+  "graph_sys_kpath_no_path": "No valid paths found.",
+  "graph_sys_kpath_detail": "Path #{i}: {latency}ms latency via {hops} hops.",
+  "graph_sys_kpath_complete": "K-Path analysis complete. Best paths selected.",
+  "graph_sys_ecmp_start": "Starting Equal-Cost Multi-Path (ECMP) analysis...",
+  "graph_sys_ecmp_no_path": "No available paths.",
+  "graph_sys_ecmp_found": "Found {count} paths with balanced cost (±5%).",
+  "graph_sys_ecmp_active": "Load balancing traffic active across {count} paths."
 }
