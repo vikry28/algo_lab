@@ -61,6 +61,14 @@ class AlgorithmLocalDataSourceImpl implements AlgorithmLocalDataSource {
         icon: "astar",
         colorHex: "FF607D8B",
       ),
+      AlgorithmModel(
+        titleKey: 'lab_graph_dijkstra_title',
+        descriptionKey: 'lab_graph_dijkstra_desc',
+        title: {'id': 'Dijkstra', 'en': 'Dijkstra'},
+        description: {'id': 'Jaringan Kompleks', 'en': 'Complex Network'},
+        icon: "graph",
+        colorHex: "FF00BCD4",
+      ),
     ];
   }
 }

@@ -32,9 +32,13 @@ class ModernConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Center(
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: 400.w),
+        constraints: BoxConstraints(
+          maxWidth: screenWidth > 600 ? 340.w : 300.w,
+        ),
         child: TweenAnimationBuilder<double>(
           tween: Tween(begin: 0.0, end: 1.0),
           duration: const Duration(milliseconds: 600),
@@ -48,8 +52,8 @@ class ModernConfirmDialog extends StatelessWidget {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 24.w),
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 28.h),
+              margin: EdgeInsets.symmetric(horizontal: 16.w),
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -59,12 +63,12 @@ class ModernConfirmDialog extends StatelessWidget {
                     const Color(0xFF1E40AF).withValues(alpha: 0.98),
                   ],
                 ),
-                borderRadius: BorderRadius.circular(28.r),
+                borderRadius: BorderRadius.circular(24.r),
                 border: Border.all(color: Colors.white24, width: 1.w),
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.primary.withValues(alpha: 0.4),
-                    blurRadius: 40,
+                    blurRadius: 30,
                     spreadRadius: 2,
                   ),
                 ],
@@ -75,42 +79,42 @@ class ModernConfirmDialog extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      padding: EdgeInsets.all(12.w),
-                      decoration: BoxDecoration(
+                      padding: EdgeInsets.all(10.w),
+                      decoration: const BoxDecoration(
                         color: Colors.white10,
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(icon, color: iconColor, size: 40.sp),
+                      child: Icon(icon, color: iconColor, size: 32.sp),
                     ),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: 12.h),
                     Text(
                       title.toUpperCase(),
                       textAlign: TextAlign.center,
                       style: AppTypography.h2.copyWith(
                         color: Colors.white,
-                        letterSpacing: 1.5,
+                        letterSpacing: 1.2,
                         fontWeight: FontWeight.w900,
-                        fontSize: 18.sp,
+                        fontSize: 16.sp,
                       ),
                     ),
-                    SizedBox(height: 10.h),
+                    SizedBox(height: 8.h),
                     Container(
-                      padding: EdgeInsets.all(12.w),
+                      padding: EdgeInsets.all(10.w),
                       decoration: BoxDecoration(
                         color: Colors.black12,
-                        borderRadius: BorderRadius.circular(16.r),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Text(
                         message,
                         textAlign: TextAlign.center,
                         style: AppTypography.bodySmall.copyWith(
-                          color: Colors.white.withValues(alpha: 0.8),
-                          height: 1.4,
-                          fontSize: 13.sp,
+                          color: Colors.white.withValues(alpha: 0.85),
+                          height: 1.3,
+                          fontSize: 12.sp,
                         ),
                       ),
                     ),
-                    SizedBox(height: 28.h),
+                    SizedBox(height: 20.h),
                     Row(
                       children: [
                         Expanded(
@@ -124,18 +128,18 @@ class ModernConfirmDialog extends StatelessWidget {
                               }
                             },
                             style: TextButton.styleFrom(
-                              padding: EdgeInsets.symmetric(vertical: 12.h),
+                              padding: EdgeInsets.symmetric(vertical: 10.h),
                             ),
                             child: Text(
                               cancelLabel,
                               style: TextStyle(
                                 color: Colors.white70,
-                                fontSize: 13.sp,
+                                fontSize: 12.sp,
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(width: 12.w),
+                        SizedBox(width: 8.w),
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () {
@@ -149,15 +153,15 @@ class ModernConfirmDialog extends StatelessWidget {
                               foregroundColor: AppColors.primary,
                               elevation: 0,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.r),
+                                borderRadius: BorderRadius.circular(10.r),
                               ),
-                              padding: EdgeInsets.symmetric(vertical: 12.h),
+                              padding: EdgeInsets.symmetric(vertical: 10.h),
                             ),
                             child: Text(
                               confirmLabel,
                               style: TextStyle(
                                 fontWeight: FontWeight.w800,
-                                fontSize: 13.sp,
+                                fontSize: 12.sp,
                               ),
                             ),
                           ),

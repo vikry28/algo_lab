@@ -1,4 +1,5 @@
 import 'package:algo_lab/features/cryptography_lab/presentation/view/rsa_lab_view.dart';
+import 'package:algo_lab/features/graph_lab/presentation/view/graph_lab_view.dart';
 import 'package:algo_lab/features/pathfinding/presentation/view/pathfinding_lab_view.dart';
 import 'package:algo_lab/features/sorting_lab/presentation/view/sorting_lab_view.dart';
 import 'package:algo_lab/features/home/presentation/view/home_view.dart';
@@ -83,6 +84,9 @@ class AppRouter {
             }
             if (id == 5) {
               return const PathfindingLabView();
+            }
+            if (id == 6) {
+              return const GraphLabView();
             }
             // Fallback for RSA (4) or others
             return SortingLabView(index: 0);
