@@ -91,7 +91,7 @@ class RealtimeDashboard extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              _liveIndicator(),
+              _liveIndicator(t),
             ],
           ),
           SizedBox(height: 6.h),
@@ -130,7 +130,7 @@ class RealtimeDashboard extends StatelessWidget {
               SizedBox(width: 6.w),
               Expanded(
                 flex: 2,
-                child: _healthItem(healthStatus, healthColor, overallHealth),
+                child: _healthItem(healthStatus, healthColor, overallHealth, t),
               ),
             ],
           ),
@@ -139,7 +139,7 @@ class RealtimeDashboard extends StatelessWidget {
     );
   }
 
-  Widget _liveIndicator() {
+  Widget _liveIndicator(AppLocalizations t) {
     return Row(
       children: [
         Container(
@@ -152,7 +152,7 @@ class RealtimeDashboard extends StatelessWidget {
         ),
         SizedBox(width: 4.w),
         Text(
-          "LIVE",
+          t.translate('graph_label_live'),
           style: TextStyle(
             color: Colors.grey,
             fontSize: 12.sp,
@@ -198,7 +198,12 @@ class RealtimeDashboard extends StatelessWidget {
     );
   }
 
-  Widget _healthItem(String status, Color color, double progress) {
+  Widget _healthItem(
+    String status,
+    Color color,
+    double progress,
+    AppLocalizations t,
+  ) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
@@ -212,7 +217,7 @@ class RealtimeDashboard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "HEALTH",
+                  t.translate('graph_label_health'),
                   style: TextStyle(
                     fontSize: 12.sp,
                     color: Colors.grey,

@@ -4,6 +4,8 @@ class DijkstraStep {
   final List<GraphNode> nodes;
   final List<GraphEdge> edges;
   final String description;
+  final String? descKey;
+  final Map<String, String>? descArgs;
   final String? activeNodeId;
   final String? sourceNodeId;
   final String? targetNodeId;
@@ -12,6 +14,8 @@ class DijkstraStep {
     required this.nodes,
     required this.edges,
     required this.description,
+    this.descKey,
+    this.descArgs,
     this.activeNodeId,
     this.sourceNodeId,
     this.targetNodeId,
@@ -46,7 +50,8 @@ class DijkstraUseCase {
       DijkstraStep(
         nodes: _cloneNodes(nodes),
         edges: _cloneEdges(edges),
-        description: "Jaringan siap. Memulai pencarian rute optimal...",
+        description: "Network initialized.",
+        descKey: 'graph_sys_ready',
       ),
     );
 
@@ -78,6 +83,8 @@ class DijkstraUseCase {
           nodes: _cloneNodes(nodes),
           edges: _cloneEdges(edges),
           description: "Checking node: ${current.label}",
+          descKey: 'graph_sys_checking',
+          descArgs: {'label': current.label},
           activeNodeId: current.id,
         ),
       );
@@ -119,7 +126,9 @@ class DijkstraUseCase {
               DijkstraStep(
                 nodes: _cloneNodes(nodes),
                 edges: _cloneEdges(edges),
-                description: "Menemukan rute lebih cepat ke ${neighbor.label}.",
+                description: "Found faster route to ${neighbor.label}.",
+                descKey: 'graph_sys_faster',
+                descArgs: {'label': neighbor.label},
                 activeNodeId: neighbor.id,
                 sourceNodeId: current.id,
                 targetNodeId: neighbor.id,
@@ -138,7 +147,9 @@ class DijkstraUseCase {
         DijkstraStep(
           nodes: _cloneNodes(nodes),
           edges: _cloneEdges(edges),
-          description: "Node ${current.label} selesai dikonfigurasi.",
+          description: "Node ${current.label} setup complete.",
+          descKey: 'graph_sys_configured',
+          descArgs: {'label': current.label},
           activeNodeId: current.id,
         ),
       );
@@ -148,7 +159,8 @@ class DijkstraUseCase {
       DijkstraStep(
         nodes: _cloneNodes(nodes),
         edges: _cloneEdges(edges),
-        description: "Tidak ditemukan rute yang tersedia.",
+        description: "No available route found.",
+        descKey: 'graph_sys_no_path',
       ),
     );
 
@@ -185,7 +197,8 @@ class DijkstraUseCase {
       DijkstraStep(
         nodes: _cloneNodes(nodes),
         edges: _cloneEdges(edges),
-        description: "Rute optimal ditemukan dan diprioritaskan!",
+        description: "Optimal route found!",
+        descKey: 'graph_sys_optimal',
       ),
     );
   }

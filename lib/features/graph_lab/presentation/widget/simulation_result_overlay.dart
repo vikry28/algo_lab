@@ -39,7 +39,10 @@ class SimulationResultOverlay extends StatelessWidget {
 
     // Trace back from target to start
     while (curr != null && curr.id != prov.startNodeId && hops < 20) {
-      pathLabels.insert(0, curr.label);
+      final label = curr.labelKey != null
+          ? t.translate(curr.labelKey!)
+          : curr.label;
+      pathLabels.insert(0, label);
       hops++;
       if (curr.parent != null) {
         try {
@@ -56,7 +59,10 @@ class SimulationResultOverlay extends StatelessWidget {
     // Add start node
     try {
       final startNode = prov.nodes.firstWhere((n) => n.id == prov.startNodeId);
-      pathLabels.insert(0, startNode.label);
+      final label = startNode.labelKey != null
+          ? t.translate(startNode.labelKey!)
+          : startNode.label;
+      pathLabels.insert(0, label);
     } catch (_) {}
 
     // Analyze route
@@ -81,7 +87,7 @@ class SimulationResultOverlay extends StatelessWidget {
     return ModernConfirmDialog(
       title: t.translate('graph_simulation_complete'),
       message:
-          "${t.translate('graph_result_replication_success')}\n\n${t.translate('graph_result_latency_label').replaceAll('{latency}', totalLatency.toString())}\n${t.translate('graph_result_path_label')} $routeType\n\n${t.translate('graph_result_detail_label')}\n$routeDetail",
+          "${t.translate('graph_result_replication_success')}\n\n${t.translate('graph_result_latency_label', arguments: {'latency': totalLatency.toString()})}\n${t.translate('graph_result_path_label')} $routeType\n\n${t.translate('graph_result_detail_label')}\n$routeDetail",
       icon: Icons.check_circle_outline,
       confirmLabel: t.translate('common_ok'),
       closeOnConfirm: false,

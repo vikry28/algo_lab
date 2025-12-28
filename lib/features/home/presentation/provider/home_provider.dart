@@ -30,31 +30,7 @@ class HomeProvider extends ChangeNotifier {
     // Apply category filter
     if (_selectedCategory != 'all') {
       filtered = filtered.where((algo) {
-        final combined = '${algo.getTitle('en')} ${algo.getDescription('en')}'
-            .toLowerCase();
-
-        switch (_selectedCategory) {
-          case 'sorting':
-            return combined.contains('sort') ||
-                combined.contains('bubble') ||
-                combined.contains('quick') ||
-                combined.contains('merge');
-          case 'graph':
-            return combined.contains('graph') ||
-                combined.contains('dijkstra') ||
-                combined.contains('bfs') ||
-                combined.contains('dfs');
-          case 'search':
-            return combined.contains('search') ||
-                combined.contains('binary') ||
-                combined.contains('linear');
-          case 'tree':
-            return combined.contains('tree') ||
-                combined.contains('bst') ||
-                combined.contains('avl');
-          default:
-            return true;
-        }
+        return algo.category == _selectedCategory;
       }).toList();
     }
 

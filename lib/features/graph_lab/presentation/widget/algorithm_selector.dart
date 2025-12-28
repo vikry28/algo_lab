@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../core/constants/app_localizations.dart';
 import '../../../../core/theme/theme_extension.dart';
 import '../provider/graph_provider.dart';
 
@@ -17,6 +18,8 @@ class AlgorithmSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.w),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -35,7 +38,7 @@ class AlgorithmSelector extends StatelessWidget {
           SizedBox(width: 10.w),
           Expanded(
             child: Text(
-              "ALGORITHM MODE:",
+              t.translate('graph_algo_mode'),
               style: TextStyle(
                 color: Colors.white70,
                 fontSize: 10.sp,
@@ -61,18 +64,18 @@ class AlgorithmSelector extends StatelessWidget {
                       prov.setAlgorithmType(newValue);
                     }
                   },
-            items: const [
+            items: [
               DropdownMenuItem(
                 value: AlgorithmType.dijkstra,
-                child: Text("Dijkstra (Standard)"),
+                child: Text(t.translate('graph_algo_dijkstra')),
               ),
               DropdownMenuItem(
                 value: AlgorithmType.kShortestPath,
-                child: Text("K-Shortest Paths"),
+                child: Text(t.translate('graph_algo_kshortest')),
               ),
               DropdownMenuItem(
                 value: AlgorithmType.ecmp,
-                child: Text("ECMP / Flow"),
+                child: Text(t.translate('graph_algo_ecmp')),
               ),
             ],
           ),

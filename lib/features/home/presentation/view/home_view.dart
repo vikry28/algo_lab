@@ -119,7 +119,8 @@ class HomeView extends StatelessWidget {
                     padding: EdgeInsets.only(bottom: 150.h),
                     sliver: Consumer<HomeProvider>(
                       builder: (context, provider, child) {
-                        final displayList = provider.filteredAlgorithms;
+                        final fullList = provider.algorithms;
+                        final displayList = fullList.take(4).toList();
                         if (provider.loading) {
                           return SliverToBoxAdapter(
                             child: Center(

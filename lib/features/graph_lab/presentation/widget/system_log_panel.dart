@@ -13,10 +13,18 @@ class SystemLogPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
-    String desc =
-        prov.currentStepIndex >= 0 && prov.currentStepIndex < prov.steps.length
-        ? prov.steps[prov.currentStepIndex].description
-        : t.translate('graph_sys_msg_ready');
+    String desc;
+    if (prov.currentStepIndex >= 0 &&
+        prov.currentStepIndex < prov.steps.length) {
+      final step = prov.steps[prov.currentStepIndex];
+      if (step.descKey != null) {
+        desc = t.translate(step.descKey!, arguments: step.descArgs);
+      } else {
+        desc = step.description;
+      }
+    } else {
+      desc = t.translate('graph_sys_msg_ready');
+    }
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.w),

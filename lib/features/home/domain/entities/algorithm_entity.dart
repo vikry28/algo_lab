@@ -5,6 +5,7 @@ class AlgorithmEntity {
   final Map<String, String> description;
   final String icon;
   final String colorHex;
+  final String category;
 
   AlgorithmEntity({
     required this.titleKey,
@@ -13,6 +14,7 @@ class AlgorithmEntity {
     required this.description,
     required this.icon,
     required this.colorHex,
+    required this.category,
   });
 
   // Optional helper

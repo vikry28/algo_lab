@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_localizations.dart';
 import '../../domain/entities/graph_node.dart';
 import '../provider/graph_provider.dart';
 
@@ -10,6 +11,7 @@ class GraphPainter extends CustomPainter {
   final bool isPacketVisible;
   final bool isDark;
   final List<BackgroundPacket> backgroundPackets;
+  final AppLocalizations? t;
 
   GraphPainter({
     required this.nodes,
@@ -19,6 +21,7 @@ class GraphPainter extends CustomPainter {
     this.isPacketVisible = false,
     required this.isDark,
     this.backgroundPackets = const [],
+    this.t,
   });
 
   IconData _getModernNodeIcon(NodeType type) {
@@ -327,9 +330,13 @@ class GraphPainter extends CustomPainter {
       );
 
       // Modern label with glass effect
+      final translatedLabel = (t != null && node.labelKey != null)
+          ? t!.translate(node.labelKey!)
+          : node.label;
+
       final labelPainter = TextPainter(
         text: TextSpan(
-          text: node.label.toUpperCase(),
+          text: translatedLabel.toUpperCase(),
           style: TextStyle(
             color: isDark ? Colors.white : Colors.black87,
             fontSize: 9,

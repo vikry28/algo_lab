@@ -128,6 +128,7 @@ class GraphLabView extends StatelessWidget {
                                           backgroundPackets:
                                               prov.backgroundPackets,
                                           isDark: isDark,
+                                          t: t,
                                         ),
                                       ),
                                     ),
@@ -137,7 +138,7 @@ class GraphLabView extends StatelessWidget {
                                   Positioned(
                                     left: 16.w,
                                     top: 16.h,
-                                    child: _buildLiveTrafficBadge(),
+                                    child: _buildLiveTrafficBadge(t),
                                   ),
 
                                   // Zoom Controls (Inside Canvas)
@@ -189,7 +190,7 @@ class GraphLabView extends StatelessWidget {
     );
   }
 
-  Widget _buildLiveTrafficBadge() {
+  Widget _buildLiveTrafficBadge(AppLocalizations t) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
       decoration: BoxDecoration(
@@ -207,7 +208,7 @@ class GraphLabView extends StatelessWidget {
           ),
           SizedBox(width: 4.w),
           Text(
-            "LIVE TRAFFIC MONITOR",
+            t.translate('graph_monitor_title'),
             style: TextStyle(
               color: Colors.white,
               fontSize: 8.sp,

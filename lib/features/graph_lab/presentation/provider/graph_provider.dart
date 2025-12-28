@@ -69,6 +69,7 @@ class GraphProvider with ChangeNotifier {
       GraphNode(
         id: "JAKARTA-DC",
         label: "Jakarta DC",
+        labelKey: "graph_node_jakarta",
         type: NodeType.server,
         position: const Offset(100, 300),
       ),
@@ -77,12 +78,14 @@ class GraphProvider with ChangeNotifier {
       GraphNode(
         id: "JKT-CORE-1",
         label: "Core Router 1",
+        labelKey: "graph_node_core1",
         type: NodeType.router,
         position: const Offset(250, 200),
       ),
       GraphNode(
         id: "JKT-CORE-2",
         label: "Core Router 2",
+        labelKey: "graph_node_core2",
         type: NodeType.router,
         position: const Offset(250, 400),
       ),
@@ -91,12 +94,14 @@ class GraphProvider with ChangeNotifier {
       GraphNode(
         id: "SURABAYA-HUB",
         label: "Surabaya Hub",
+        labelKey: "graph_node_surabaya",
         type: NodeType.hub,
         position: const Offset(400, 150),
       ),
       GraphNode(
         id: "BANDUNG-HUB",
         label: "Bandung Hub",
+        labelKey: "graph_node_bandung",
         type: NodeType.hub,
         position: const Offset(400, 300),
       ),
@@ -105,6 +110,7 @@ class GraphProvider with ChangeNotifier {
       GraphNode(
         id: "BATAM-GATEWAY",
         label: "Batam Gateway",
+        labelKey: "graph_node_batam",
         type: NodeType.router,
         position: const Offset(550, 250),
       ),
@@ -113,6 +119,7 @@ class GraphProvider with ChangeNotifier {
       GraphNode(
         id: "CABLE-LANDING-ID",
         label: "ID Cable Station",
+        labelKey: "graph_node_id_cable",
         type: NodeType.hub,
         position: const Offset(700, 300),
       ),
@@ -120,6 +127,7 @@ class GraphProvider with ChangeNotifier {
       GraphNode(
         id: "CABLE-LANDING-SG",
         label: "SG Cable Station",
+        labelKey: "graph_node_sg_cable",
         type: NodeType.hub,
         position: const Offset(850, 300),
       ),
@@ -128,12 +136,14 @@ class GraphProvider with ChangeNotifier {
       GraphNode(
         id: "SG-EDGE-1",
         label: "SG Edge 1",
+        labelKey: "graph_node_sg_edge1",
         type: NodeType.router,
         position: const Offset(1000, 200),
       ),
       GraphNode(
         id: "SG-EDGE-2",
         label: "SG Edge 2",
+        labelKey: "graph_node_sg_edge2",
         type: NodeType.router,
         position: const Offset(1000, 400),
       ),
@@ -142,6 +152,7 @@ class GraphProvider with ChangeNotifier {
       GraphNode(
         id: "SINGAPORE-DC",
         label: "Singapore DC",
+        labelKey: "graph_node_singapore",
         type: NodeType.server,
         position: const Offset(1150, 300),
       ),

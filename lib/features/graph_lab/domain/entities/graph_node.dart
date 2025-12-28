@@ -7,6 +7,7 @@ enum NodeType { router, server, cloud, terminal, hub }
 class GraphNode {
   final String id;
   final String label;
+  final String? labelKey;
   final Offset position;
   final NodeStatus status;
   final double distance;
@@ -17,6 +18,7 @@ class GraphNode {
   GraphNode({
     required this.id,
     required this.label,
+    this.labelKey,
     required this.position,
     this.status = NodeStatus.unvisited,
     this.distance = double.infinity,
@@ -28,6 +30,7 @@ class GraphNode {
   GraphNode copyWith({
     String? id,
     String? label,
+    String? labelKey,
     Offset? position,
     NodeStatus? status,
     double? distance,
@@ -38,6 +41,7 @@ class GraphNode {
     return GraphNode(
       id: id ?? this.id,
       label: label ?? this.label,
+      labelKey: labelKey ?? this.labelKey,
       position: position ?? this.position,
       status: status ?? this.status,
       distance: distance ?? this.distance,
