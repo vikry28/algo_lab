@@ -37,7 +37,7 @@ void main() {
       provider = RSAProvider(useCase: mockUseCase);
 
       expect(provider.keyPair, tKeyPair);
-      expect(provider.inputMessage, "SECRET");
+      expect(provider.inputMessage, "SECURE-PAY-100");
       verify(mockUseCase.generateKeyPair()).called(1);
     });
 
@@ -52,21 +52,7 @@ void main() {
       expect(provider.decryptedValues, isEmpty);
     });
 
-    test('startEncryption encrypts message', () async {
-      when(mockUseCase.generateKeyPair()).thenReturn(tKeyPair);
-      when(mockUseCase.encrypt(any, any, any)).thenReturn(BigInt.from(99));
-
-      provider = RSAProvider(useCase: mockUseCase);
-      provider.updateMessage("A");
-
-      await provider.startEncryption();
-
-      expect(provider.encryptedValues.length, 1);
-      expect(provider.encryptedValues.first, BigInt.from(99));
-      expect(provider.isEncrypting, false);
-    });
-
-    test('startDecryption decrypts values', () async {
+    test('runScenario (encryption) works', () async {
       when(mockUseCase.generateKeyPair()).thenReturn(tKeyPair);
       when(mockUseCase.encrypt(any, any, any)).thenReturn(BigInt.from(99));
       when(
@@ -74,17 +60,15 @@ void main() {
       ).thenReturn(BigInt.from(65)); // 'A'
 
       provider = RSAProvider(useCase: mockUseCase);
+      provider.setScenario(RSAScenario.encryption);
       provider.updateMessage("A");
 
-      // Manually populate encrypted values to skip encryption delay in test
-      provider.encryptedValues = [BigInt.from(99)];
+      await provider.runScenario();
 
-      await provider.startDecryption();
-
-      expect(provider.decryptedValues.length, 1);
-      expect(provider.decryptedValues.first, BigInt.from(65));
+      expect(provider.encryptedValues.length, 1);
+      expect(provider.encryptedValues.first, BigInt.from(99));
       expect(provider.decryptedString, "A");
-      expect(provider.isDecrypting, false);
+      expect(provider.isProcessing, false);
     });
   });
 }

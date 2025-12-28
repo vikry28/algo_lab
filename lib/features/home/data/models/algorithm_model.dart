@@ -7,6 +7,7 @@ class AlgorithmModel {
   final Map<String, String> description;
   final String icon;
   final String colorHex;
+  final String category;
 
   AlgorithmModel({
     required this.titleKey,
@@ -15,6 +16,7 @@ class AlgorithmModel {
     required this.description,
     required this.icon,
     required this.colorHex,
+    required this.category,
   });
 
   // helper untuk ambil bahasa aktif
@@ -29,6 +31,7 @@ class AlgorithmModel {
       description: description,
       icon: icon,
       colorHex: colorHex,
+      category: category,
     );
   }
 }

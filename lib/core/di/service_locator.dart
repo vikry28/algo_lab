@@ -27,6 +27,8 @@ import '../../features/pathfinding/domain/usecases/astar_usecase.dart';
 import '../../features/pathfinding/presentation/provider/pathfinding_provider.dart';
 import '../../features/cryptography_lab/domain/usecases/rsa_usecase.dart';
 import '../../features/cryptography_lab/presentation/provider/rsa_provider.dart';
+import '../../features/graph_lab/domain/usecases/dijkstra_usecase.dart';
+import '../../features/graph_lab/presentation/provider/graph_provider.dart';
 import '../../features/profile/data/repository/profile_repository_impl.dart';
 import '../../features/profile/domain/repository/profile_repository.dart';
 import '../../features/profile/domain/usecases/profile_usecases.dart';
@@ -83,10 +85,12 @@ class ServiceLocator {
     sl.registerLazySingleton(() => QuickSortUsecase());
     sl.registerLazySingleton(() => AStarUseCase());
     sl.registerLazySingleton(() => RSAUseCase());
+    sl.registerLazySingleton(() => DijkstraUseCase());
 
     // PROVIDERS
     sl.registerFactory(() => PathfindingProvider());
     sl.registerFactory(() => RSAProvider());
+    sl.registerFactory(() => GraphProvider());
 
     // Utils
     sl.registerLazySingleton(() => SortingLogger());

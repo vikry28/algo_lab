@@ -40,6 +40,7 @@ void main() {
         description: {'en': 'Sorting algorithm', 'id': 'Algoritma sorting'},
         icon: '🫧',
         colorHex: '#8B5CF6',
+        category: 'sorting',
       ),
       AlgorithmEntity(
         titleKey: 'dijkstra',
@@ -48,6 +49,7 @@ void main() {
         description: {'en': 'Graph algorithm', 'id': 'Algoritma graph'},
         icon: '🗺️',
         colorHex: '#F97316',
+        category: 'graph',
       ),
     ];
 
@@ -97,6 +99,7 @@ void main() {
         description: {'en': 'Sorting algorithm', 'id': 'Algoritma sorting'},
         icon: '🫧',
         colorHex: '#8B5CF6',
+        category: 'sorting',
       ),
       AlgorithmEntity(
         titleKey: 'binary_search',
@@ -105,6 +108,7 @@ void main() {
         description: {'en': 'Search algorithm', 'id': 'Algoritma search'},
         icon: '🔍',
         colorHex: '#3B82F6',
+        category: 'search',
       ),
     ];
 
@@ -153,6 +157,7 @@ void main() {
         description: {'en': 'Sorting algorithm', 'id': 'Algoritma sorting'},
         icon: '🫧',
         colorHex: '#8B5CF6',
+        category: 'sorting',
       ),
       AlgorithmEntity(
         titleKey: 'dijkstra',
@@ -161,6 +166,7 @@ void main() {
         description: {'en': 'Graph algorithm', 'id': 'Algoritma graph'},
         icon: '🗺️',
         colorHex: '#F97316',
+        category: 'graph',
       ),
     ];
 
@@ -205,6 +211,7 @@ void main() {
             description: {'en': 'Test algorithm', 'id': 'Algoritma test'},
             icon: '🔍',
             colorHex: '#000000',
+            category: 'sorting',
           ),
         ],
       );

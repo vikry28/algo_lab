@@ -25,6 +25,7 @@ void main() {
       description: {'en': 'Description'},
       icon: 'assets/icon.png',
       colorHex: '#FFFFFF',
+      category: 'sorting',
     ),
   ];
 

@@ -308,7 +308,13 @@ class _AlgoBottomSheetState extends State<AlgoBottomSheet> {
     HomeProvider provider,
   ) {
     final l10n = AppLocalizations.of(context);
-    final categories = ['all', 'sorting', 'graph', 'search', 'tree'];
+    final categories = [
+      'all',
+      'sorting',
+      'graph',
+      'pathfinding',
+      'cryptography',
+    ];
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,

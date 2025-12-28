@@ -17,6 +17,7 @@ class AlgorithmLocalDataSourceImpl implements AlgorithmLocalDataSource {
         description: {'id': 'Sorting sederhana', 'en': 'Simple sorting'},
         icon: "bubble",
         colorHex: "FF2196F3",
+        category: "sorting",
       ),
       AlgorithmModel(
         titleKey: 'lab_selection_title',
@@ -25,6 +26,7 @@ class AlgorithmLocalDataSourceImpl implements AlgorithmLocalDataSource {
         description: {'id': 'Sorting seleksi', 'en': 'Selection sorting'},
         icon: "selection",
         colorHex: "FF4CAF50",
+        category: "sorting",
       ),
       AlgorithmModel(
         titleKey: 'lab_insertion_title',
@@ -33,6 +35,7 @@ class AlgorithmLocalDataSourceImpl implements AlgorithmLocalDataSource {
         description: {'id': 'Sorting sisipan', 'en': 'Insertion sorting'},
         icon: "insertion",
         colorHex: "FFFF9800",
+        category: "sorting",
       ),
       AlgorithmModel(
         titleKey: 'lab_quick_title',
@@ -41,6 +44,7 @@ class AlgorithmLocalDataSourceImpl implements AlgorithmLocalDataSource {
         description: {'id': 'Sorting cepat', 'en': 'Quick sorting'},
         icon: "quick",
         colorHex: "FFF44336",
+        category: "sorting",
       ),
       AlgorithmModel(
         titleKey: 'rsa_title_pro',
@@ -52,6 +56,7 @@ class AlgorithmLocalDataSourceImpl implements AlgorithmLocalDataSource {
         },
         icon: "rsa",
         colorHex: "FF9C27B0",
+        category: "cryptography",
       ),
       AlgorithmModel(
         titleKey: 'astar_title_pro',
@@ -60,6 +65,16 @@ class AlgorithmLocalDataSourceImpl implements AlgorithmLocalDataSource {
         description: {'id': 'Pencarian rute', 'en': 'Route finding'},
         icon: "astar",
         colorHex: "FF607D8B",
+        category: "pathfinding",
+      ),
+      AlgorithmModel(
+        titleKey: 'lab_graph_dijkstra_title',
+        descriptionKey: 'lab_graph_dijkstra_desc',
+        title: {'id': 'Dijkstra', 'en': 'Dijkstra'},
+        description: {'id': 'Jaringan Kompleks', 'en': 'Complex Network'},
+        icon: "graph",
+        colorHex: "FF00BCD4",
+        category: "graph",
       ),
     ];
   }

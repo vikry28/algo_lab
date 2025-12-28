@@ -32,8 +32,14 @@ class AppLocalizations {
     }
   }
 
-  String translate(String key) {
-    return _localizedStrings?[key] ?? key;
+  String translate(String key, {Map<String, String>? arguments}) {
+    String value = _localizedStrings?[key] ?? key;
+    if (arguments != null) {
+      arguments.forEach((key, val) {
+        value = value.replaceAll('{$key}', val);
+      });
+    }
+    return value;
   }
 }
 

@@ -10,6 +10,7 @@ import '../../features/profile/presentation/provider/achievement_provider.dart';
 import '../../features/profile/presentation/provider/profile_provider.dart';
 import '../../features/pathfinding/presentation/provider/pathfinding_provider.dart';
 import '../../features/cryptography_lab/presentation/provider/rsa_provider.dart';
+import '../../features/graph_lab/presentation/provider/graph_provider.dart';
 import '../theme/theme_provider.dart';
 import 'service_locator.dart';
 
@@ -123,6 +124,7 @@ class ProviderFactory {
       // ========== PATHFINDING PROVIDER ==========
       ChangeNotifierProvider(create: (_) => sl<PathfindingProvider>()),
       ChangeNotifierProvider(create: (_) => sl<RSAProvider>()),
+      ChangeNotifierProvider(create: (_) => sl<GraphProvider>()),
       // ========== CRYPTOGRAPHY LAB PROVIDER ==========
     ];
   }
